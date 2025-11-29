@@ -1,599 +1,348 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <title>UniPlace — Role-based Demo (Medium)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniPlace – Role Based Portal</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
 
   <style>
-    :root{
-      --primary:#1766d1;
-      --bg:#f3f6fb;
-      --card:#ffffff;
-      --sidebar:#0e2946;
-      --accent:#0b74ff;
-      --muted:#6b7280;
-      --radius:10px;
+    :root {
+      --primary: #0d6efd;
+      --secondary: #6c757d;
+      --bg: #f4f6f9;
+      --sidebar-bg: #1e272e;
+      --sidebar-hover: #3c40c6;
+      --card-bg: white;
     }
-    *{box-sizing:border-box}
-    body{ margin:0; font-family:"Poppins",sans-serif; background:var(--bg); color:#0f172a; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      font-family: Poppins, sans-serif;
+    }
+    .topbar {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--primary);
+      color: white;
+      padding: 12px 20px;
+    }
+    .topbar button {
+      background: #fff !important;
+      color: #000;
+      border: none;
+      padding: 6px 12px;
+      font-size: 13px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 220px;
+      height: 100%;
+      background: var(--sidebar-bg);
+      padding-top: 20px;
+      display: none;
+    }
+    .sidebar ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .sidebar a {
+      display: block;
+      padding: 12px 20px;
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .sidebar a.active, .sidebar a:hover {
+      background: var(--sidebar-hover);
+    }
+    .content {
+      margin-left: 230px;
+      padding: 20px;
+      display: none;
+      animation: fade 0.3s ease;
+    }
+    @keyframes fade { from {opacity: 0;} to {opacity: 1;} }
 
-    /* Topbar */
-    .topbar{ display:flex; justify-content:space-between; align-items:center; padding:12px 20px; background:var(--primary); color:white; box-shadow:0 4px 14px rgba(2,6,23,0.12);}
-    .logout-small{ background:white; color:var(--primary); border-radius:8px; padding:6px 10px; border:none; cursor:pointer; font-weight:600; }
+    .job-card, .app-card, .record-card {
+      background: white;
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
 
-    /* Shell */
-    .app-shell{ display:flex; min-height:100vh; }
-    .sidebar{ width:240px; background:linear-gradient(180deg,var(--sidebar),#08305a); color:white; padding:22px; display:flex; flex-direction:column; gap:14px; }
-    .logo{ display:flex; align-items:center; gap:10px; }
-    .logo-b{ width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-weight:700; }
-    .nav a{ display:block; color:rgba(255,255,255,0.95); text-decoration:none; padding:10px 12px; border-radius:8px; margin-bottom:6px; }
-    .nav a.active, .nav a:hover{ background:rgba(255,255,255,0.06); }
+    /* login box */
+    .login-container {
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-box {
+      width: 360px;
+      padding: 24px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+      text-align: center;
+    }
+    .login-box input, .login-box select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 12px;
+      background: var(--primary);
+      border: none;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #999;
+    }
 
-    .main{ flex:1; padding:22px; }
-    .topbar-note{ font-size:13px; color:rgba(255,255,255,0.9); }
-
-    .card{ background:var(--card); padding:16px; border-radius:var(--radius); box-shadow:0 6px 18px rgba(15,23,42,0.05); margin-bottom:16px; }
-    .grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
-
-    .job{ border-radius:10px; padding:12px; background:linear-gradient(180deg,#fff,#fbfdff); box-shadow:0 8px 22px rgba(15,23,42,0.04); margin-bottom:12px; }
-    .small{ color:var(--muted); font-size:13px; }
-
-    table.data{ width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 6px 18px rgba(2,6,23,0.04); }
-    table.data th, table.data td{ padding:10px 12px; border-bottom:1px solid #eef2f8; text-align:left; }
-    table.data th{ background:#f6f9ff; }
-
-    /* Login */
-    .login-wrap{ min-height:100vh; display:flex; align-items:center; justify-content:center; background:#e9eef9; padding:20px; }
-    .login-box{ width:420px; background:white; padding:20px; border-radius:10px; box-shadow:0 6px 20px rgba(2,6,23,0.08); }
-    .form-row{ display:flex; gap:8px; }
-
-    .btn{ padding:8px 12px; border-radius:8px; border:none; cursor:pointer; font-weight:600; }
-    .btn-primary{ background:var(--accent); color:white; }
-    .btn-outline{ background:transparent; border:1px solid rgba(0,0,0,0.08); color:#111; }
-
-    @media(max-width:900px){
-      .app-shell{ flex-direction:column; }
-      .sidebar{ width:100%; height:auto; position:relative; display:flex; flex-direction:row; overflow:auto; padding:8px; }
-      .main{ padding:12px; }
+    table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    table th, table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eee;
+    }
+    table th {
+      background: #f2f2f2;
     }
   </style>
 </head>
+
 <body>
 
-<!-- Topbar (hidden before login) -->
-<div id="topbar" class="topbar" style="display:none">
-  <div>
-    <strong>UniPlace</strong>
-    <div class="topbar-note" id="topbar-note"></div>
-  </div>
-  <div style="display:flex; gap:8px; align-items:center;">
-    <div id="user-info" class="small"></div>
-    <button id="logoutBtn" class="logout-small">Logout</button>
-  </div>
+<!-- TOP BAR -->
+<div class="topbar" id="topbar">
+  <h2>UniPlace</h2>
+  <button onclick="logout()">Logout</button>
 </div>
 
-<!-- Login screen -->
-<div id="loginScreen" class="login-wrap" style="display:none">
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <ul>
+    <li><a class="active" onclick="showPage('dashboard', this)">Dashboard</a></li>
+    <li><a onclick="showPage('jobs', this)">Jobs</a></li>
+    <li><a onclick="showPage('applications', this)">Applications</a></li>
+    <li><a onclick="showPage('records', this)">Records</a></li>
+    <li><a onclick="showPage('reports', this)">Reports</a></li>
+  </ul>
+</div>
+
+<!-- CONTENT -->
+<div class="content" id="main"></div>
+
+<!-- LOGIN -->
+<div class="login-container" id="login">
   <div class="login-box">
-    <h3 style="margin:0 0 8px 0">Sign in — UniPlace (Demo)</h3>
-
-    <!-- Pre-filled demo user quick pick -->
-    <div style="margin-bottom:10px;">
-      <label class="small">Quick demo users</label>
-      <div style="display:flex; gap:8px; margin-top:6px;">
-        <button class="btn btn-outline" onclick="prefill('Student One','student1@demo.com','student')">Student</button>
-        <button class="btn btn-outline" onclick="prefill('Company One','company1@demo.com','company')">Company</button>
-        <button class="btn btn-outline" onclick="prefill('POfficer','officer@demo.com','placement_officer')">Officer</button>
-        <button class="btn btn-outline" onclick="prefill('AdminUser','admin@demo.com','admin')">Admin</button>
-      </div>
-    </div>
-
-    <div style="margin-top:12px;">
-      <input id="inputName" placeholder="Full name" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; margin-bottom:8px;" />
-      <input id="inputEmail" placeholder="Email" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; margin-bottom:8px;" />
-      <div style="display:flex; gap:8px; margin-bottom:10px;">
-        <select id="inputRole" style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd;">
-          <option value="student">Student</option>
-          <option value="company">Company</option>
-          <option value="placement_officer">Placement Officer</option>
-          <option value="admin">Admin</option>
-        </select>
-        <button id="btnSign" class="btn btn-primary" onclick="doLogin()">Sign in</button>
-      </div>
-      <div class="small">This demo stores data in your browser's LocalStorage.</div>
-    </div>
+    <h2>Login</h2>
+    <input id="name" placeholder="Name">
+    <input id="email" placeholder="Email">
+    <select id="role">
+      <option value="student">Student</option>
+      <option value="officer">Placement Officer</option>
+      <option value="admin">Admin</option>
+    </select>
+    <button onclick="loginUser()">Login</button>
   </div>
-</div>
-
-<!-- App shell -->
-<div id="appShell" class="app-shell" style="display:none">
-  <aside class="sidebar" id="sidebar">
-    <div class="logo"><div class="logo-b">U</div><div><strong>UniPlace</strong></div></div>
-    <nav class="nav" style="margin-top:8px;">
-      <a href="#" data-view="dashboard" onclick="navTo(event)" class="active">Dashboard</a>
-      <a href="#" data-view="jobs" onclick="navTo(event)">Jobs</a>
-      <a href="#" data-view="applications" onclick="navTo(event)">Applications</a>
-      <a href="#" data-view="placements" onclick="navTo(event)">Placements</a>
-      <a href="#" data-view="reports" onclick="navTo(event)">Reports</a>
-      <a href="#" data-view="admin" onclick="navTo(event)" id="adminLink" style="display:none">Admin</a>
-    </nav>
-
-    <div style="margin-top:auto; font-size:13px;">
-      <div id="sideUser" style="font-weight:700"></div>
-      <div id="sideRole" class="small" style="opacity:0.9"></div>
-    </div>
-  </aside>
-
-  <main class="main" id="main"></main>
 </div>
 
 <script>
-/* -------------------------
-  Storage keys and seeding
-   - users[], jobs[], applications[], placements[]
-   - medium seed: many entries per role
--------------------------*/
-const LS_USERS = 'uniplace_users';
-const LS_JOBS = 'uniplace_jobs';
-const LS_APPS = 'uniplace_apps';
-const LS_PLACEMENTS = 'uniplace_placements';
-const LS_SEEDED = 'uniplace_seeded';
+/* ----------------------------------------
+   DATA FOR EACH ROLE (Option B)
+-----------------------------------------*/
 
-/* Utility ID */
-function uid(pref='id'){ return pref + '_' + Date.now() + '_' + Math.floor(Math.random()*900); }
+const DATA = {
+  student: {
+    applications: [
+      { job: "Frontend Developer", company: "TechCorp", status: "Shortlisted" },
+      { job: "Data Analyst", company: "DataSolve", status: "Pending" },
+      { job: "AI Intern", company: "SmartAI", status: "Rejected" }
+    ],
+    reports: `
+      <ul>
+        <li>Placement Rate: 92%</li>
+        <li>Top Companies: IBM, Infosys, Wipro</li>
+        <li>Your Chances: Strong</li>
+      </ul>
+    `
+  },
 
-/* Read / write helpers */
-function read(key){ try{ return JSON.parse(localStorage.getItem(key)) || []; } catch(e){ return []; } }
-function write(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+  officer: {
+    records: [
+      {name:"Rahul", dept:"CSE", company:"Google", pkg:12},
+      {name:"Asha", dept:"AIML", company:"Microsoft", pkg:10},
+      {name:"Vikram", dept:"ECE", company:"Infosys", pkg:6}
+    ],
+    pendingApplications: [
+      {student:"John", job:"Java Developer", company:"Infosys"},
+      {student:"Riya", job:"UI Designer", company:"Adobe"},
+      {student:"Karan", job:"Backend Intern", company:"TechMahindra"}
+    ],
+    reports: `
+      <ul>
+        <li>Total Students Placed: 420</li>
+        <li>Highest Package: 18 LPA</li>
+        <li>Top Recruiters: Google, Amazon, Accenture</li>
+      </ul>
+    `
+  },
 
-/* Seed medium datasets */
-function seedData(){
-  if (localStorage.getItem(LS_SEEDED)) return;
+  admin: {
+    allApplications: [
+      {name:"Rahul", job:"DevOps Engineer", company:"Amazon", status:"Selected"},
+      {name:"Asha", job:"ML Engineer", company:"DeepMind", status:"Pending"},
+      {name:"Kiran", job:"React Developer", company:"TCS", status:"Rejected"}
+    ],
+    allRecords: [
+      {name:"Ravi", dept:"CSE", company:"Amazon", pkg:18},
+      {name:"Zara", dept:"IT", company:"Oracle", pkg:10},
+      {name:"Manoj", dept:"EEE", company:"Zoho", pkg:6}
+    ],
+    reports: `
+      <ul>
+        <li>System Health: OK</li>
+        <li>Total Users: 1200+</li>
+        <li>Database Size: 52MB</li>
+        <li>Overall Placement Rate: 91%</li>
+      </ul>
+    `
+  }
+};
 
-  const users = [
-    { id:'u_student1', name:'Student One', email:'student1@demo.com', role:'student' },
-    { id:'u_student2', name:'Student Two', email:'student2@demo.com', role:'student' },
-    { id:'u_company1', name:'Company One', email:'company1@demo.com', role:'company' },
-    { id:'u_company2', name:'Company Two', email:'company2@demo.com', role:'company' },
-    { id:'u_officer', name:'POfficer', email:'officer@demo.com', role:'placement_officer' },
-    { id:'u_admin', name:'AdminUser', email:'admin@demo.com', role:'admin' }
-  ];
-  write(LS_USERS, users);
+/* ----------------------------------------
+   LOGIN
+-----------------------------------------*/
+function loginUser() {
+  let name = document.getElementById("name").value;
+  let role = document.getElementById("role").value;
+  localStorage.setItem("name", name);
+  localStorage.setItem("role", role);
 
-  const jobs = [
-    { id:'j1', title:'Frontend Developer', companyId:'u_company1', description:'React + JS', salary:'10k/month' },
-    { id:'j2', title:'Backend Engineer', companyId:'u_company1', description:'Node.js, Express', salary:'25k' },
-    { id:'j3', title:'AI Intern', companyId:'u_company2', description:'ML research', salary:'8k/month' },
-    { id:'j4', title:'Data Analyst', companyId:'u_company2', description:'SQL, Python', salary:'18k' },
-    { id:'j5', title:'DevOps Intern', companyId:'u_company1', description:'CI/CD', salary:'12k' }
-  ];
-  write(LS_JOBS, jobs);
+  document.getElementById("login").style.display = "none";
+  document.getElementById("topbar").style.display = "flex";
+  document.getElementById("sidebar").style.display = "block";
+  document.getElementById("main").style.display = "block";
 
-  const apps = [
-    // apps for student1
-    { id:uid('app'), jobId:'j1', studentId:'u_student1', status:'Shortlisted', appliedAt:'2025-11-10' },
-    { id:uid('app'), jobId:'j3', studentId:'u_student1', status:'Pending', appliedAt:'2025-11-05' },
-    { id:uid('app'), jobId:'j4', studentId:'u_student1', status:'Rejected', appliedAt:'2025-10-20' },
-
-    // apps for student2
-    { id:uid('app'), jobId:'j2', studentId:'u_student2', status:'Interview', appliedAt:'2025-11-12' },
-    { id:uid('app'), jobId:'j5', studentId:'u_student2', status:'Pending', appliedAt:'2025-11-01' },
-
-    // other applications (for admin / officer view)
-    { id:uid('app'), jobId:'j1', studentId:'u_student2', status:'Pending', appliedAt:'2025-10-30' },
-    { id:uid('app'), jobId:'j3', studentId:'u_student2', status:'Rejected', appliedAt:'2025-09-12' },
-    { id:uid('app'), jobId:'j4', studentId:'u_student1', status:'Placed', appliedAt:'2025-09-01' }
-  ];
-  write(LS_APPS, apps);
-
-  const placements = [
-    { id:uid('pl'), student:'Rahul Kumar', dept:'CSE', company:'CodeWave', package:8.2, year:2025, placedBy:'u_officer' },
-    { id:uid('pl'), student:'Asha Sharma', dept:'AIML', company:'SmartAI', package:7.5, year:2025, placedBy:'u_officer' },
-    { id:uid('pl'), student:'Sandeep Rao', dept:'ECE', company:'TCS', package:4.2, year:2024, placedBy:'u_officer' },
-    { id:uid('pl'), student:'Meena Roy', dept:'CSE', company:'Dell', package:6.8, year:2025, placedBy:'u_officer' },
-    { id:uid('pl'), student:'Vikram P', dept:'CSE', company:'CodeWave', package:9.0, year:2025, placedBy:'u_admin' }
-  ];
-  write(LS_PLACEMENTS, placements);
-
-  localStorage.setItem(LS_SEEDED,'1');
+  showPage("dashboard");
 }
 
-/* -------------------------
-  UI / Routing helpers
--------------------------*/
-let CURRENT_USER = null;
-
-function showLogin(){
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('appShell').style.display = 'none';
-  document.getElementById('topbar').style.display = 'none';
+/* ----------------------------------------
+   LOGOUT
+-----------------------------------------*/
+function logout() {
+  localStorage.clear();
+  location.reload();
 }
 
-function showAppForUser(user){
-  CURRENT_USER = user;
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('appShell').style.display = 'flex';
-  document.getElementById('topbar').style.display = 'flex';
-  document.getElementById('user-info').textContent = user.name + ' (' + user.role.replace('_',' ') + ')';
-  document.getElementById('topbar-note').textContent = user.email;
-  document.getElementById('sideUser').textContent = user.name;
-  document.getElementById('sideRole').textContent = user.role.replace('_',' ');
-  // admin link visible only for admin
-  document.getElementById('adminLink').style.display = (user.role==='admin') ? 'block' : 'none';
-  // default view
-  renderView('dashboard');
-}
-
-/* Navigation */
-function navTo(e){
-  e.preventDefault();
-  const view = e.currentTarget.getAttribute('data-view');
-  // mark active
-  Array.from(document.querySelectorAll('.nav a')).forEach(a=>a.classList.remove('active'));
-  e.currentTarget.classList.add('active');
-  renderView(view);
-}
-
-/* Render view based on role */
-function renderView(view){
-  const main = document.getElementById('main');
-  if (!CURRENT_USER) { showLogin(); return; }
-
-  if (view === 'dashboard'){
-    // dashboard shows quick stats tailored to role
-    const jobs = read(LS_JOBS);
-    const apps = read(LS_APPS);
-    const placements = read(LS_PLACEMENTS);
-
-    // role-specific stats
-    let html = `<div class="card"><h3>Welcome, ${CURRENT_USER.name}</h3><div class="small">Role: ${CURRENT_USER.role}</div></div>`;
-
-    if (CURRENT_USER.role === 'student'){
-      const mine = apps.filter(a=>a.studentId === CURRENT_USER.id);
-      html += `<div class="grid"><div class="card"><h4>Your Applications</h4><div class="small">Total: ${mine.length}</div></div>
-               <div class="card"><h4>Available Jobs</h4><div class="small">Total: ${jobs.length}</div></div>
-               <div class="card"><h4>Your Placements</h4><div class="small">Placed Count: ${placements.filter(p => p.student && p.student.toLowerCase().includes(CURRENT_USER.name.split(' ')[0].toLowerCase())).length}</div></div></div>`;
-    } else if (CURRENT_USER.role === 'company'){
-      const myJobs = jobs.filter(j=>j.companyId === CURRENT_USER.id);
-      const myApps = apps.filter(a=> myJobs.map(j=>j.id).includes(a.jobId));
-      html += `<div class="grid"><div class="card"><h4>My Jobs</h4><div class="small">Posted: ${myJobs.length}</div></div>
-               <div class="card"><h4>Applications to My Jobs</h4><div class="small">Total: ${myApps.length}</div></div>
-               <div class="card"><h4>Open Roles</h4><div class="small">Open: ${myJobs.length}</div></div></div>`;
-    } else if (CURRENT_USER.role === 'placement_officer'){
-      html += `<div class="grid"><div class="card"><h4>All Placements</h4><div class="small">Total: ${read(LS_PLACEMENTS).length}</div></div>
-               <div class="card"><h4>All Applications</h4><div class="small">Total: ${read(LS_APPS).length}</div></div>
-               <div class="card"><h4>Students</h4><div class="small">Total users: ${read(LS_USERS).filter(u=>u.role==='student').length}</div></div></div>`;
-    } else if (CURRENT_USER.role === 'admin'){
-      html += `<div class="grid"><div class="card"><h4>System Overview</h4><div class="small">Users: ${read(LS_USERS).length}</div></div>
-               <div class="card"><h4>Jobs</h4><div class="small">Total: ${jobs.length}</div></div>
-               <div class="card"><h4>Placements</h4><div class="small">Total: ${placements.length}</div></div></div>`;
-    }
-
-    main.innerHTML = html;
+/* ----------------------------------------
+   SIDEBAR NAVIGATION
+-----------------------------------------*/
+function showPage(page, el) {
+  if (el) {
+    document.querySelectorAll(".sidebar a").forEach(a=>a.classList.remove("active"));
+    el.classList.add("active");
   }
 
-  else if (view === 'jobs'){
-    const jobs = read(LS_JOBS);
-    let html = `<div class="card"><h3>Jobs</h3></div>`;
-    // company can post job
-    if (CURRENT_USER.role === 'company'){
-      html += `<div class="card"><h4>Post a new job</h4>
-                <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-                  <input id="jobTitle" placeholder="Job title" style="padding:8px;border-radius:6px;border:1px solid #ddd;flex:2" />
-                  <input id="jobSalary" placeholder="Salary" style="padding:8px;border-radius:6px;border:1px solid #ddd;flex:1" />
-                </div>
-                <div style="margin-top:8px"><input id="jobDesc" placeholder="Short description" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd" /></div>
-                <div style="text-align:right;margin-top:8px"><button class="btn btn-primary" onclick="postJob()">Post Job</button></div>
-               </div>`;
-    }
+  const area = document.getElementById("main");
+  area.innerHTML = `<h2>${page.toUpperCase()}</h2>`;
 
-    // list jobs with apply button for students and edit for companies
-    html += `<div class="card"><h4>Available Jobs</h4><div>`;
-    jobs.forEach(j=>{
-      const company = read(LS_USERS).find(u=>u.id===j.companyId);
-      html += `<div class="job"><div style="display:flex;justify-content:space-between;align-items:center">
-                <div><strong>${escapeHtml(j.title)}</strong><div class="small">${escapeHtml(j.description)}</div><div class="small">Company: ${company ? company.name : 'Unknown'}</div></div>
-                <div style="text-align:right">
-                  <div class="small"> ${escapeHtml(j.salary||'N/A')} </div>
-                  ${CURRENT_USER.role === 'student' ? `<div style="margin-top:8px"><button class="btn btn-primary" onclick="applyJob('${j.id}')">Apply</button></div>` : ''}
-                  ${CURRENT_USER.role === 'company' && CURRENT_USER.id === j.companyId ? `<div style="margin-top:8px"><button class="btn btn-outline" onclick="removeJob('${j.id}')">Remove</button></div>` : ''}
-                </div>
-              </div></div>`;
-    });
-    html += `</div></div>`;
+  const role = localStorage.getItem("role");
 
-    main.innerHTML = html;
+  /* ------------ DASHBOARD ------------*/
+  if (page === "dashboard") {
+    area.innerHTML += `<div class="job-card"><h3>Welcome, ${localStorage.getItem("name")}!</h3>
+    <p>Your Role: ${role.toUpperCase()}</p></div>`;
   }
 
-  else if (view === 'applications'){
-    const apps = read(LS_APPS);
-    const jobs = read(LS_JOBS);
-    const users = read(LS_USERS);
-
-    let visible = [];
-    if (CURRENT_USER.role === 'student'){
-      visible = apps.filter(a=>a.studentId === CURRENT_USER.id);
-    } else if (CURRENT_USER.role === 'company'){
-      const myJobs = jobs.filter(j=> j.companyId === CURRENT_USER.id).map(j=>j.id);
-      visible = apps.filter(a=> myJobs.includes(a.jobId));
-    } else { // officer or admin
-      visible = apps.slice().sort((a,b)=> b.appliedAt.localeCompare(a.appliedAt));
-    }
-
-    let html = `<div class="card"><h3>Applications</h3></div>`;
-    html += `<div class="card"><table class="data"><thead><tr><th>Job</th><th>Student</th><th>Status</th><th>Applied</th><th>Actions</th></tr></thead><tbody>`;
-    visible.forEach(a=>{
-      const job = jobs.find(j=>j.id===a.jobId) || {title:'-'};
-      const student = users.find(u=>u.id===a.studentId) || {name:'-'};
-      html += `<tr>
-                <td>${escapeHtml(job.title)}</td>
-                <td>${escapeHtml(student.name)}</td>
-                <td>${escapeHtml(a.status)}</td>
-                <td>${escapeHtml(a.appliedAt || '')}</td>
-                <td>
-                  ${(CURRENT_USER.role === 'placement_officer' || CURRENT_USER.role === 'admin' || (CURRENT_USER.role==='company' && jobs.find(j=>j.id===a.jobId && j.companyId===CURRENT_USER.id))) ? 
-                    `<button class="btn btn-primary" onclick="updateApp('${a.id}','Interview')">Interview</button>
-                     <button class="btn btn-outline" onclick="updateApp('${a.id}','Placed')">Mark Placed</button>` : ''}
-                  ${(CURRENT_USER.role === 'student' && a.studentId === CURRENT_USER.id) ? `<button class="btn btn-outline" onclick="withdrawApp('${a.id}')">Withdraw</button>` : ''}
-                </td>
-              </tr>`;
-    });
-    html += `</tbody></table></div>`;
-    main.innerHTML = html;
+  /* ------------ JOBS ------------*/
+  if (page === "jobs") {
+    area.innerHTML += `
+      <div class="job-card"><h3>Software Engineer</h3><p>Google - Bangalore</p></div>
+      <div class="job-card"><h3>Data Scientist</h3><p>Amazon - Hyderabad</p></div>
+      <div class="job-card"><h3>UI Designer</h3><p>Adobe - Chennai</p></div>
+    `;
   }
 
-  else if (view === 'placements'){
-    // PO can add/edit/remove; admin can view all; students see limited
-    const placements = read(LS_PLACEMENTS);
-    let html = `<div class="card"><h3>Placements</h3></div>`;
+  /* ------------ APPLICATIONS ------------*/
+  if (page === "applications") {
+    if (role === "student") {
+      DATA.student.applications.forEach(a => {
+        area.innerHTML += `<div class="app-card"><strong>${a.job}</strong>
+        <p>${a.company}</p><p>Status: ${a.status}</p></div>`;
+      });
 
-    if (CURRENT_USER.role === 'placement_officer' || CURRENT_USER.role === 'admin'){
-      html += `<div class="card">
-                <h4>Add placement record</h4>
-                <div style="display:flex;gap:8px;flex-wrap:wrap">
-                  <input id="plStudent" placeholder="Student Name" style="padding:8px;border-radius:6px;border:1px solid #ddd"/>
-                  <input id="plDept" placeholder="Dept" style="padding:8px;border-radius:6px;border:1px solid #ddd"/>
-                  <input id="plCompany" placeholder="Company" style="padding:8px;border-radius:6px;border:1px solid #ddd"/>
-                  <input id="plPackage" placeholder="Package (LPA)" style="padding:8px;border-radius:6px;border:1px solid #ddd;width:120px"/>
-                  <input id="plYear" placeholder="Year" style="padding:8px;border-radius:6px;border:1px solid #ddd;width:120px"/>
-                </div>
-                <div style="text-align:right;margin-top:8px"><button class="btn btn-primary" onclick="addPlacement()">Add</button></div>
-               </div>`;
-    }
+    } else if (role === "officer") {
+      DATA.officer.pendingApplications.forEach(a => {
+        area.innerHTML += `<div class="app-card"><strong>${a.student}</strong>
+        <p>${a.job} @ ${a.company}</p></div>`;
+      });
 
-    html += `<div class="card"><h4>Placement Records</h4><table class="data"><thead><tr><th>Student</th><th>Dept</th><th>Company</th><th>Package</th><th>Year</th><th>Action</th></tr></thead><tbody>`;
-    placements.forEach((p, idx)=>{
-      html += `<tr>
-                <td>${escapeHtml(p.student)}</td>
-                <td>${escapeHtml(p.dept)}</td>
-                <td>${escapeHtml(p.company)}</td>
-                <td>${escapeHtml(p.package)}</td>
-                <td>${escapeHtml(p.year)}</td>
-                <td>
-                  ${(CURRENT_USER.role==='placement_officer' || CURRENT_USER.role==='admin') ? `<button class="btn btn-outline" onclick="removePlacement(${idx})">Remove</button>` : '—'}
-                </td>
-              </tr>`;
-    });
-    html += `</tbody></table></div>`;
-    main.innerHTML = html;
-  }
-
-  else if (view === 'reports'){
-    // role-specific reports
-    const placements = read(LS_PLACEMENTS);
-    const jobs = read(LS_JOBS);
-    const apps = read(LS_APPS);
-
-    if (CURRENT_USER.role === 'student'){
-      const mine = apps.filter(a=> a.studentId === CURRENT_USER.id);
-      main.innerHTML = `<div class="card"><h3>Your Reports</h3><p class="small">You have applied to ${mine.length} job(s).</p></div>`;
-    } else if (CURRENT_USER.role === 'company'){
-      const myJobs = jobs.filter(j=> j.companyId === CURRENT_USER.id);
-      const myApps = apps.filter(a=> myJobs.map(j=>j.id).includes(a.jobId));
-      main.innerHTML = `<div class="card"><h3>Company Reports</h3><p class="small">Jobs posted: ${myJobs.length} • Applications: ${myApps.length}</p></div>`;
-    } else if (CURRENT_USER.role === 'placement_officer' || CURRENT_USER.role === 'admin'){
-      // officer/admin see more analytics
-      const deptCounts = {};
-      placements.forEach(p=> { deptCounts[p.dept] = (deptCounts[p.dept]||0)+1; });
-      let deptHtml = Object.keys(deptCounts).map(d=> `<li>${escapeHtml(d)}: ${deptCounts[d]}</li>`).join('');
-      main.innerHTML = `<div class="card"><h3>Reports</h3>
-                        <p class="small">Total placements: ${placements.length}</p>
-                        <div class="small"><strong>By Dept</strong><ul>${deptHtml}</ul></div>
-                        <div class="small"><strong>Jobs total</strong>: ${jobs.length}</div>
-                        <div class="small"><strong>Applications total</strong>: ${apps.length}</div>
-                       </div>`;
     } else {
-      main.innerHTML = `<div class="card"><h3>Reports</h3><p class="small">No reports for your role.</p></div>`;
+      DATA.admin.allApplications.forEach(a => {
+        area.innerHTML += `<div class="app-card"><strong>${a.name}</strong>
+        <p>${a.job} - ${a.company}</p><p>${a.status}</p></div>`;
+      });
     }
   }
 
-  else if (view === 'admin'){
-    // admin-only user management
-    if (CURRENT_USER.role !== 'admin'){ document.getElementById('main').innerHTML = `<div class="card"><h3>Not authorized</h3></div>`; return; }
-    const users = read(LS_USERS);
-    let html = `<div class="card"><h3>Admin — Users</h3><table class="data"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Action</th></tr></thead><tbody>`;
-    users.forEach((u, idx)=>{
-      html += `<tr><td>${escapeHtml(u.name)}</td><td>${escapeHtml(u.email)}</td><td>${escapeHtml(u.role)}</td>
-               <td><button class="btn btn-outline" onclick="removeUser(${idx})">Remove</button></td></tr>`;
-    });
-    html += `</tbody></table></div>`;
-    main.innerHTML = html;
+  /* ------------ RECORDS ------------*/
+  if (page === "records") {
+    if (role === "officer") {
+      DATA.officer.records.forEach(r=>{
+        area.innerHTML += `<div class="record-card"><strong>${r.name}</strong>
+        <p>${r.dept} → ${r.company} (${r.pkg} LPA)</p></div>`;
+      });
+    } else {
+      DATA.admin.allRecords.forEach(r=>{
+        area.innerHTML += `<div class="record-card"><strong>${r.name}</strong>
+        <p>${r.dept} → ${r.company} (${r.pkg} LPA)</p></div>`;
+      });
+    }
+  }
+
+  /* ------------ REPORTS ------------*/
+  if (page === "reports") {
+    area.innerHTML += `<div class="job-card"><h3>Reports</h3>${
+      DATA[role].reports
+    }</div>`;
   }
 }
 
-/* -------------------------
-  Actions: login, post job, apply, update, placements
--------------------------*/
-function prefill(name,email,role){
-  document.getElementById('inputName').value = name;
-  document.getElementById('inputEmail').value = email;
-  document.getElementById('inputRole').value = role;
-}
-function doLogin(){
-  const name = document.getElementById('inputName').value.trim();
-  const email = document.getElementById('inputEmail').value.trim();
-  const role = document.getElementById('inputRole').value;
-  if (!name || !email){ alert('Enter name and email'); return; }
-
-  // ensure user exists in users list, else add
-  let users = read(LS_USERS);
-  let user = users.find(u=> u.email.toLowerCase() === email.toLowerCase());
-  if (!user){
-    user = { id: uid('u'), name, email, role };
-    users.push(user);
-    write(LS_USERS, users);
+/* Restore session if user is already logged in */
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("role")) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("topbar").style.display = "flex";
+    document.getElementById("sidebar").style.display = "block";
+    document.getElementById("main").style.display = "block";
+    showPage("dashboard");
   }
-  // store current user session in memory (not separate storage)
-  showAppForUser(user);
-}
-
-/* Logout */
-document.getElementById('logoutBtn').addEventListener('click', ()=> {
-  CURRENT_USER = null;
-  // optional: keep demo users saved; we just hide app
-  document.getElementById('appShell').style.display = 'none';
-  showLogin();
 });
-
-/* Post job (company) */
-function postJob(){
-  const title = document.getElementById('jobTitle').value.trim();
-  const desc = document.getElementById('jobDesc').value.trim();
-  const salary = document.getElementById('jobSalary').value.trim();
-  if (!title) return alert('Enter job title');
-  const jobs = read(LS_JOBS);
-  const j = { id: uid('j'), title, description: desc, salary, companyId: CURRENT_USER.id };
-  jobs.unshift(j);
-  write(LS_JOBS, jobs);
-  alert('Job posted');
-  renderView('jobs');
-}
-
-/* Remove job (company) */
-function removeJob(jobId){
-  if (!confirm('Remove this job?')) return;
-  let jobs = read(LS_JOBS);
-  jobs = jobs.filter(j=> j.id !== jobId);
-  write(LS_JOBS, jobs);
-  renderView('jobs');
-}
-
-/* Apply job (student) */
-function applyJob(jobId){
-  if (CURRENT_USER.role !== 'student') return alert('Only students can apply');
-  const apps = read(LS_APPS);
-  if (apps.find(a=> a.jobId === jobId && a.studentId === CURRENT_USER.id)) return alert('Already applied');
-  const newApp = { id: uid('app'), jobId, studentId: CURRENT_USER.id, status:'Pending', appliedAt: new Date().toISOString().split('T')[0] };
-  apps.push(newApp);
-  write(LS_APPS, apps);
-  alert('Application submitted');
-  renderView('applications');
-}
-
-/* Update application status */
-function updateApp(appId, status){
-  const apps = read(LS_APPS);
-  const app = apps.find(a=> a.id === appId);
-  if (!app) return alert('Not found');
-  // permission checks: company can act only for its job; officer/admin can act
-  if (CURRENT_USER.role === 'company'){
-    const job = read(LS_JOBS).find(j=> j.id === app.jobId);
-    if (!job || job.companyId !== CURRENT_USER.id) return alert('Forbidden');
-  }
-  if (['placement_officer','admin','company'].includes(CURRENT_USER.role)){
-    app.status = status;
-    write(LS_APPS, apps);
-    alert('Status updated to ' + status);
-    renderView('applications');
-  } else {
-    alert('Not authorized');
-  }
-}
-
-/* Withdraw application (student) */
-function withdrawApp(appId){
-  if (!confirm('Withdraw application?')) return;
-  let apps = read(LS_APPS);
-  apps = apps.filter(a=> a.id !== appId || a.studentId !== CURRENT_USER.id ? true : false);
-  write(LS_APPS, apps);
-  alert('Application withdrawn');
-  renderView('applications');
-}
-
-/* Placements: add/remove */
-function addPlacement(){
-  const student = document.getElementById('plStudent').value.trim();
-  const dept = document.getElementById('plDept').value.trim();
-  const company = document.getElementById('plCompany').value.trim();
-  const pkg = parseFloat(document.getElementById('plPackage').value) || 0;
-  const year = parseInt(document.getElementById('plYear').value) || new Date().getFullYear();
-  if (!student || !dept || !company || !pkg) return alert('Fill student, dept, company and package');
-  const placements = read(LS_PLACEMENTS);
-  placements.unshift({ id: uid('pl'), student, dept, company, package: pkg, year, placedBy: CURRENT_USER.id });
-  write(LS_PLACEMENTS, placements);
-  alert('Placement record added');
-  renderView('placements');
-}
-function removePlacement(idx){
-  if (!confirm('Remove this record?')) return;
-  const placements = read(LS_PLACEMENTS);
-  placements.splice(idx,1);
-  write(LS_PLACEMENTS, placements);
-  renderView('placements');
-}
-
-/* Admin: remove user */
-function removeUser(idx){
-  if (!confirm('Remove user?')) return;
-  const users = read(LS_USERS);
-  users.splice(idx,1);
-  write(LS_USERS, users);
-  renderView('admin');
-}
-
-/* Utility: escape html in text */
-function escapeHtml(s){
-  if (!s && s!==0) return '';
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-/* Init: on load */
-document.addEventListener('DOMContentLoaded', ()=> {
-  seedData();
-
-  // attach login quick prefill in demo area (there's also doLogin() button)
-  const urlParams = new URLSearchParams(window.location.search);
-  // Optional: quick auto-login for convenience when ?auto=student1
-  const auto = urlParams.get('auto');
-  if (auto){
-    const users = read(LS_USERS);
-    const u = users.find(x => x.email === auto);
-    if (u){ showAppForUser(u); return; }
-  }
-
-  // show login by default
-  showLogin();
-});
-
-/* Enable sign-in from quick buttons */
-function prefill(name,email,role){
-  document.getElementById('inputName')?.value = name;
-  document.getElementById('inputEmail')?.value = email;
-  if (document.getElementById('inputRole')) document.getElementById('inputRole').value = role;
-}
-
-/* The login UI in this file was named input* earlier; adapt: */
-(function adaptLoginElements(){
-  // tie the login box controls declared in HTML earlier to new IDs if present
-  const btn = document.getElementById('btnSign');
-  if (btn){
-    // link input fields in the existing top login area to doLogin()
-    document.getElementById('btnSign').addEventListener('click', doLogin);
-  }
-})();
-
 </script>
+
 </body>
 </html>
