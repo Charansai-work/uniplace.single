@@ -180,7 +180,7 @@
         <option value="placement_officer">Placement Officer</option>
         <option value="admin">Admin</option>
       </select>
-      <button id="loginBtn" onclick="login()" disabled>Login</button>
+      <button id="loginBtn" onclick="login()">Login</button>
     </div>
   </div>
 
@@ -334,7 +334,8 @@
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!pattern.test(email)) {
       error.textContent = "Invalid Email Format";
-      button.disabled = true;
+    } else {
+      error.textContent = "";
     } else {
       error.textContent = "";
       button.disabled = false;
