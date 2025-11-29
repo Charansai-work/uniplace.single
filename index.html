@@ -252,7 +252,7 @@
       const role = localStorage.getItem('role') || 'student';
       const name = localStorage.getItem('name') || '';
 
-      main.innerHTML = <h3>${page.charAt(0).toUpperCase() + page.slice(1)}</h3>;
+      main.innerHTML =`<h3>${page.charAt(0).toUpperCase() + page.slice(1)}</h3>`;
 
       if (page === 'dashboard') {
         if (role === 'placement_officer') {
