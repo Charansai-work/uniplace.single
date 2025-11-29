@@ -22,6 +22,8 @@
       background: var(--bg);
       font-family: Poppins, sans-serif;
     }
+
+    /* TOPBAR */
     .topbar {
       display: none;
       justify-content: space-between;
@@ -39,6 +41,8 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
+    /* SIDEBAR */
     .sidebar {
       position: fixed;
       top: 0; left: 0;
@@ -63,6 +67,8 @@
     .sidebar a.active, .sidebar a:hover {
       background: var(--sidebar-hover);
     }
+
+    /* CONTENT */
     .content {
       margin-left: 230px;
       padding: 20px;
@@ -79,7 +85,7 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
-    /* login box */
+    /* LOGIN */
     .login-container {
       display: flex;
       height: 100vh;
@@ -111,15 +117,12 @@
       border-radius: 6px;
       cursor: pointer;
     }
-    button:disabled {
-      background: #999;
-    }
 
     table {
       width: 100%;
-      margin-top: 10px;
       border-collapse: collapse;
       background: white;
+      margin-top: 10px;
       border-radius: 6px;
       overflow: hidden;
     }
@@ -171,61 +174,76 @@
 </div>
 
 <script>
-/* ----------------------------------------
-   DATA FOR EACH ROLE (Option B)
------------------------------------------*/
+/* ============================
+   ROLE-BASED DATA (UPDATED)
+============================ */
 
 const DATA = {
   student: {
     applications: [
-      { job: "Frontend Developer", company: "TechCorp", status: "Shortlisted" },
-      { job: "Data Analyst", company: "DataSolve", status: "Pending" },
-      { job: "AI Intern", company: "SmartAI", status: "Rejected" }
+      { job:"Frontend Developer Intern", company:"Infosys", status:"Shortlisted", applied:"2025-10-21" },
+      { job:"Python Developer", company:"TCS", status:"Pending", applied:"2025-11-02" },
+      { job:"Data Analyst Intern", company:"Capgemini", status:"Rejected", applied:"2025-09-14" }
     ],
     reports: `
       <ul>
-        <li>Placement Rate: 92%</li>
-        <li>Top Companies: IBM, Infosys, Wipro</li>
-        <li>Your Chances: Strong</li>
+        <li>Your Placement Eligibility: Strong</li>
+        <li>Upcoming Drives: 4</li>
+        <li>Profile Strength: 82%</li>
       </ul>
     `
   },
 
   officer: {
+    /* Editable placement records */
     records: [
-      {name:"Rahul", dept:"CSE", company:"Google", pkg:12},
-      {name:"Asha", dept:"AIML", company:"Microsoft", pkg:10},
-      {name:"Vikram", dept:"ECE", company:"Infosys", pkg:6}
+      { name:"Neha R", dept:"CSE", company:"Google", pkg:18, year:2025 },
+      { name:"Vishal K", dept:"AIML", company:"Microsoft", pkg:12, year:2025 },
+      { name:"Arjun S", dept:"ECE", company:"Amazon", pkg:10, year:2025 },
+      { name:"Sneha M", dept:"IT", company:"Wipro", pkg:6, year:2025 }
     ],
+
+    /* Officer sees pending applications */
     pendingApplications: [
-      {student:"John", job:"Java Developer", company:"Infosys"},
-      {student:"Riya", job:"UI Designer", company:"Adobe"},
-      {student:"Karan", job:"Backend Intern", company:"TechMahindra"}
+      { student:"Rahul", job:"Java Developer", company:"Infosys", applied:"2025-11-10" },
+      { student:"Preeti", job:"UI Designer", company:"Adobe", applied:"2025-11-06" },
+      { student:"Karan", job:"Cloud Intern", company:"Tech Mahindra", applied:"2025-11-12" },
+      { student:"Sanjay", job:"Full Stack Intern", company:"Zoho", applied:"2025-10-28" }
     ],
+
     reports: `
       <ul>
-        <li>Total Students Placed: 420</li>
-        <li>Highest Package: 18 LPA</li>
-        <li>Top Recruiters: Google, Amazon, Accenture</li>
+        <li>Total Students Placed: 522</li>
+        <li>Highest Package: 32 LPA</li>
+        <li>Active Companies This Year: 114</li>
+        <li>Upcoming Drives: 9 Companies</li>
       </ul>
     `
   },
 
   admin: {
+    /* Admin sees all applications */
     allApplications: [
-      {name:"Rahul", job:"DevOps Engineer", company:"Amazon", status:"Selected"},
-      {name:"Asha", job:"ML Engineer", company:"DeepMind", status:"Pending"},
-      {name:"Kiran", job:"React Developer", company:"TCS", status:"Rejected"}
+      { name:"Rohit", job:"DevOps Engineer", company:"Amazon", status:"Selected", applied:"2025-11-01" },
+      { name:"Asha", job:"ML Engineer", company:"DeepMind", status:"Pending", applied:"2025-11-03" },
+      { name:"Kiran", job:"React Developer", company:"TCS", status:"Rejected", applied:"2025-09-20" },
+      { name:"Sita", job:"AI Intern", company:"Google", status:"Pending", applied:"2025-10-29" },
+      { name:"Mahesh", job:"Backend Developer", company:"Cognizant", status:"Selected", applied:"2025-11-05" }
     ],
+
+    /* Admin sees all placement records */
     allRecords: [
-      {name:"Ravi", dept:"CSE", company:"Amazon", pkg:18},
-      {name:"Zara", dept:"IT", company:"Oracle", pkg:10},
-      {name:"Manoj", dept:"EEE", company:"Zoho", pkg:6}
+      { name:"Ravi", dept:"CSE", company:"Amazon", pkg:18 },
+      { name:"Zara", dept:"IT", company:"Oracle", pkg:10 },
+      { name:"Manoj", dept:"EEE", company:"Zoho", pkg:6 },
+      { name:"Priya", dept:"CSE", company:"Google", pkg:25 },
+      { name:"Karthik", dept:"AIML", company:"Meta", pkg:30 }
     ],
+
     reports: `
       <ul>
         <li>System Health: OK</li>
-        <li>Total Users: 1200+</li>
+        <li>Total Registered Users: 1237</li>
         <li>Database Size: 52MB</li>
         <li>Overall Placement Rate: 91%</li>
       </ul>
@@ -233,12 +251,14 @@ const DATA = {
   }
 };
 
-/* ----------------------------------------
-   LOGIN
------------------------------------------*/
+
+/* ============================
+     LOGIN
+============================ */
 function loginUser() {
   let name = document.getElementById("name").value;
   let role = document.getElementById("role").value;
+
   localStorage.setItem("name", name);
   localStorage.setItem("role", role);
 
@@ -250,35 +270,40 @@ function loginUser() {
   showPage("dashboard");
 }
 
-/* ----------------------------------------
-   LOGOUT
------------------------------------------*/
+
+/* ============================
+     LOGOUT
+============================ */
 function logout() {
   localStorage.clear();
   location.reload();
 }
 
-/* ----------------------------------------
-   SIDEBAR NAVIGATION
------------------------------------------*/
+
+/* ============================
+     PAGE RENDERING
+============================ */
 function showPage(page, el) {
+
   if (el) {
     document.querySelectorAll(".sidebar a").forEach(a=>a.classList.remove("active"));
     el.classList.add("active");
   }
 
+  const role = localStorage.getItem("role");
   const area = document.getElementById("main");
   area.innerHTML = `<h2>${page.toUpperCase()}</h2>`;
 
-  const role = localStorage.getItem("role");
-
-  /* ------------ DASHBOARD ------------*/
+  /* DASHBOARD */
   if (page === "dashboard") {
-    area.innerHTML += `<div class="job-card"><h3>Welcome, ${localStorage.getItem("name")}!</h3>
-    <p>Your Role: ${role.toUpperCase()}</p></div>`;
+    area.innerHTML += `
+      <div class="job-card">
+        <h3>Welcome, ${localStorage.getItem("name")}!</h3>
+        <p>Your Role: ${role.toUpperCase()}</p>
+      </div>`;
   }
 
-  /* ------------ JOBS ------------*/
+  /* JOBS */
   if (page === "jobs") {
     area.innerHTML += `
       <div class="job-card"><h3>Software Engineer</h3><p>Google - Bangalore</p></div>
@@ -287,52 +312,71 @@ function showPage(page, el) {
     `;
   }
 
-  /* ------------ APPLICATIONS ------------*/
+  /* APPLICATIONS */
   if (page === "applications") {
+
     if (role === "student") {
-      DATA.student.applications.forEach(a => {
-        area.innerHTML += `<div class="app-card"><strong>${a.job}</strong>
-        <p>${a.company}</p><p>Status: ${a.status}</p></div>`;
-      });
-
-    } else if (role === "officer") {
-      DATA.officer.pendingApplications.forEach(a => {
-        area.innerHTML += `<div class="app-card"><strong>${a.student}</strong>
-        <p>${a.job} @ ${a.company}</p></div>`;
-      });
-
-    } else {
-      DATA.admin.allApplications.forEach(a => {
-        area.innerHTML += `<div class="app-card"><strong>${a.name}</strong>
-        <p>${a.job} - ${a.company}</p><p>${a.status}</p></div>`;
+      DATA.student.applications.forEach(a=>{
+        area.innerHTML += `<div class="app-card">
+          <strong>${a.job}</strong><p>${a.company}</p><p>Status: ${a.status}</p>
+        </div>`;
       });
     }
+
+    else if (role === "officer") {
+      DATA.officer.pendingApplications.forEach(a=>{
+        area.innerHTML += `<div class="app-card">
+          <strong>${a.student}</strong><p>${a.job} @ ${a.company}</p>
+        </div>`;
+      });
+    }
+
+    else {
+      DATA.admin.allApplications.forEach(a=>{
+        area.innerHTML += `<div class="app-card">
+          <strong>${a.name}</strong><p>${a.job} - ${a.company}</p>
+          <p>Status: ${a.status}</p>
+        </div>`;
+      });
+    }
+
   }
 
-  /* ------------ RECORDS ------------*/
+  /* RECORDS */
   if (page === "records") {
+
     if (role === "officer") {
       DATA.officer.records.forEach(r=>{
-        area.innerHTML += `<div class="record-card"><strong>${r.name}</strong>
-        <p>${r.dept} → ${r.company} (${r.pkg} LPA)</p></div>`;
-      });
-    } else {
-      DATA.admin.allRecords.forEach(r=>{
-        area.innerHTML += `<div class="record-card"><strong>${r.name}</strong>
-        <p>${r.dept} → ${r.company} (${r.pkg} LPA)</p></div>`;
+        area.innerHTML += `<div class="record-card">
+          <strong>${r.name}</strong>
+          <p>${r.dept} → ${r.company} (${r.pkg} LPA)</p>
+        </div>`;
       });
     }
+
+    else {
+      DATA.admin.allRecords.forEach(r=>{
+        area.innerHTML += `<div class="record-card">
+          <strong>${r.name}</strong>
+          <p>${r.dept} → ${r.company} (${r.pkg} LPA)</p>
+        </div>`;
+      });
+    }
+
   }
 
-  /* ------------ REPORTS ------------*/
+  /* REPORTS */
   if (page === "reports") {
-    area.innerHTML += `<div class="job-card"><h3>Reports</h3>${
-      DATA[role].reports
-    }</div>`;
+    area.innerHTML += `
+      <div class="job-card">
+        <h3>Reports</h3>
+        ${DATA[role].reports}
+      </div>`;
   }
 }
 
-/* Restore session if user is already logged in */
+
+/* RESTORE LOGIN SESSION */
 document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("role")) {
     document.getElementById("login").style.display = "none";
