@@ -5,14 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UniPlace</title>
 
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
 
-  <!-- Material Dashboard Professional Theme -->
   <style>
     :root {
       --primary: #007bff;
-      --secondary: #6c757d;
       --bg: #f4f6f9;
       --card-bg: #ffffff;
       --sidebar-bg: #1e272e;
@@ -23,8 +20,6 @@
       font-family: "Poppins", sans-serif;
       margin: 0;
       background: var(--bg);
-      color: #2f3640;
-      transition: 0.3s ease;
     }
 
     /* Top Bar */
@@ -35,7 +30,17 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+    }
+    .topbar button {
+      background: #ff4b4b;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+    }
+    .topbar button:hover {
+      background: #d63031;
     }
 
     /* Sidebar */
@@ -43,162 +48,105 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 220px;
+      width: 240px;
       height: 100vh;
       background: var(--sidebar-bg);
-      padding: 25px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      transition: 0.3s;
+      padding: 20px 0;
     }
     .sidebar h3 {
       text-align: center;
-      margin-bottom: 10px;
-      color: #fff;
+      color: white;
     }
     .sidebar ul {
       list-style: none;
       padding: 0;
-    }
-    .sidebar li {
-      margin: 10px 0;
+      margin-top: 20px;
     }
     .sidebar a {
       padding: 12px 20px;
       display: block;
       color: white;
       text-decoration: none;
-      font-size: 15px;
       border-left: 4px solid transparent;
-      transition: 0.25s;
+      transition: 0.3s;
     }
     .sidebar a:hover, .sidebar a.active {
       background: var(--sidebar-hover);
       border-left: 4px solid white;
     }
 
-    /* Page Content */
+    /* Content */
     .content {
       margin-left: 240px;
-      padding: 24px;
-      animation: fadeIn 0.5s ease;
+      padding: 25px;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    /* Job Cards */
     .job-card {
       background: var(--card-bg);
-      padding: 20px;
+      padding: 18px;
+      margin-top: 12px;
       border-radius: 10px;
-      margin-bottom: 18px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .job-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
     }
 
-    /* Login */
+    table {
+      width: 100%;
+      background: var(--card-bg);
+      border-collapse: collapse;
+      margin-top: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    table th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    /* Login Screen */
     .login-container {
-      display: none;
+      display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       background: #dcdde1;
     }
-
     .login-box {
+      width: 350px;
       background: white;
-      width: 360px;
-      padding: 24px;
+      padding: 25px;
       border-radius: 12px;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-      animation: fadeIn 0.5s ease;
     }
-
-    .login-box input, .login-box select {
+    .login-box input, select {
       width: 100%;
       padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
       margin-top: 10px;
-      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid #aaa;
     }
-
-    button {
+    .login-box button {
       width: 100%;
-      margin-top: 15px;
       background: var(--primary);
-      border: none;
-      padding: 10px;
       color: white;
+      padding: 10px;
+      margin-top: 15px;
+      border: none;
       border-radius: 6px;
       cursor: pointer;
-      transition: 0.3s ease;
     }
-    button:hover:not(:disabled) {
-      background: #0056c9;
-    }
-    button:disabled {
-      background: gray;
+    .login-box button:disabled {
+      background: grey;
       cursor: not-allowed;
-    }
-
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      background: var(--card-bg);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    table.data-table th, table.data-table td {
-      padding: 12px 14px;
-      text-align: left;
-      border-bottom: 1px solid #eee;
-    }
-    table.data-table th {
-      background: #f7f9fb;
-    }
-
-    .report-list {
-      background: var(--card-bg);
-      padding: 12px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    .muted { color:#666; font-size:13px }
-
-    @media (max-width: 768px) {
-      .sidebar { width: 180px }
-      .content { margin-left: 200px }
-      .login-box { width: 320px }
     }
   </style>
 </head>
-<body>
 
-  <div class="topbar" id="topbar" style="display:none">
-    <div>
-      <h2 style="margin:0">UniPlace</h2>
-      <div id="userBadge" class="muted" style="margin-left:12px;display:inline-block"></div>
-    </div>
-    <div>
-      <button onclick="showLogin()">Logout</button>
-    </div>
+<body>
+  <div class="topbar" id="topbar">
+    <h2>UniPlace</h2>
+    <button onclick="showLogin()">Logout</button>
   </div>
 
-  <div class="sidebar" id="sidebar" style="display:none">
+  <div class="sidebar" id="sidebar">
     <h3>Menu</h3>
     <ul>
       <li><a href="#" onclick="showPage('dashboard', this)" class="active">Dashboard</a></li>
@@ -208,265 +156,100 @@
     </ul>
   </div>
 
-  <div class="content" id="main-content" style="display:none">
+  <div class="content" id="main-content">
     <h3>Welcome to UniPlace!</h3>
-    <div class="job-card"><h4>Frontend Developer</h4><p>TechCorp - Remote</p></div>
-    <div class="job-card"><h4>Data Analyst</h4><p>DataSolve - Hyderabad</p></div>
   </div>
 
-  <!-- Login Screen -->
+  <!-- LOGIN -->
   <div class="login-container" id="login">
     <div class="login-box">
       <h2>Login</h2>
-      <input type="text" id="name" placeholder="Name" />
-      <input type="email" id="email" placeholder="Email" oninput="validateEmail()" />
-      <p id="emailError" style="color:red;font-size:13px;text-align:left"></p>
+      <input type="text" id="name" placeholder="Enter Name" />
+      <input type="email" id="email" placeholder="Enter Email" oninput="validateEmail()" />
+      <p id="emailError" style="color:red;font-size:12px;"></p>
       <select id="role">
         <option value="student">Student</option>
-        <option value="placement_officer">Placement Officer</option>
         <option value="admin">Admin</option>
       </select>
       <button id="loginBtn" onclick="login()" disabled>Login</button>
     </div>
   </div>
 
-  <script>
-    // sample placement records (persisted to localStorage for demo)
-    const DEFAULT_RECORDS = [
-      { student: 'Rahul K', dept: 'CSE', company: 'CodeWave', package: 8.0, year: 2025 },
-      { student: 'Asha S', dept: 'AIML', company: 'SmartAI', package: 7.2, year: 2025 }
-    ];
+<script>
+  function setActiveLink(current) {
+    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+    current.classList.add('active');
+  }
 
-    function setActiveLink(el) {
-      document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-      if (el) el.classList.add('active');
+  function showPage(page, element) {
+    setActiveLink(element);
+    const main = document.getElementById("main-content");
+
+    main.innerHTML = `<h3>${page.charAt(0).toUpperCase() + page.slice(1)}</h3>`;
+
+    if (page === "dashboard") {
+      main.innerHTML += `<div class="job-card"><p>Welcome to your dashboard!</p></div>`;
+    } 
+    
+    else if (page === "jobs") {
+      main.innerHTML += `
+        <div class="job-card"><h4>Frontend Developer</h4><p>TechCorp - Remote</p></div>
+        <div class="job-card"><h4>AI Intern</h4><p>SmartAI - Hyderabad</p></div>`;
     }
 
-    function showPage(page, el) {
-      setActiveLink(el);
-      const main = document.getElementById('main-content');
-      const role = localStorage.getItem('role') || 'student';
-      const name = localStorage.getItem('name') || '';
-
-      main.innerHTML = <h3>${page.charAt(0).toUpperCase() + page.slice(1)}</h3>;
-
-      if (page === 'dashboard') {
-        if (role === 'placement_officer') {
-          main.innerHTML += <div class='job-card'><h4>Officer Dashboard</h4><p>Welcome back, ${name}. Manage records and view reports below.</p></div>;
-        } else {
-          main.innerHTML += <div class='job-card'><h4>Welcome Back!</h4><p>Here's your quick overview.</p></div>;
-        }
-
-        main.innerHTML += `
-          <div class='report-list' style='margin-top:12px;'>
-            <strong>Quick Stats</strong>
-            <ul>
-              <li>Total Jobs: 128</li>
-              <li>Applications: 24</li>
-              <li>Shortlisted: 8</li>
-            </ul>
-          </div>`;
-
-      } else if (page === 'jobs') {
-        main.innerHTML += `
-          <div style='display:flex;gap:12px;flex-wrap:wrap;'>
-            <div class='job-card' style='width:320px;'><h4>Software Engineer</h4><p>Company: CodeWave</p><p>Location: Bengaluru</p></div>
-            <div class='job-card' style='width:320px;'><h4>AI Intern</h4><p>Company: SmartAI</p><p>Location: Hyderabad</p></div>
-            <div class='job-card' style='width:320px;'><h4>UX Designer</h4><p>Company: CreativeLabs</p><p>Location: Remote</p></div>
-          </div>`;
-
-      } else if (page === 'applications') {
-        main.innerHTML += `
-          <div class='job-card'><h4>My Applications</h4><p>Status Tracking</p></div>
-          <table class='data-table'>
-            <thead><tr><th>Job</th><th>Company</th><th>Applied On</th><th>Status</th></tr></thead>
-            <tbody>
-              <tr><td>Frontend Developer</td><td>TechCorp</td><td>2025-11-10</td><td style='color:green'>Shortlisted</td></tr>
-              <tr><td>Data Analyst</td><td>DataSolve</td><td>2025-11-08</td><td style='color:orange'>Pending</td></tr>
-              <tr><td>AI Intern</td><td>SmartAI</td><td>2025-10-22</td><td style='color:red'>Rejected</td></tr>
-            </tbody>
-          </table>`;
-
-      } else if (page === 'reports') {
-        if (role === 'placement_officer') {
-          // officer: editable records + add form
-          main.innerHTML += `
-            <div class='job-card'><h4>Placement Records & Reports (Officer)</h4><p class='muted'>Manage placed students and export reports.</p>
-              <div style='margin-top:12px'>
-                <div style='display:flex;gap:8px;'><input id='recStudent' placeholder='Student Name' /><input id='recDept' placeholder='Dept' /></div>
-                <div style='display:flex;gap:8px;margin-top:8px;'><input id='recCompany' placeholder='Company' /><input id='recPackage' placeholder='Package (LPA)' type='number' step='0.1' /></div>
-                <div style='display:flex;gap:8px;margin-top:8px;'><input id='recYear' placeholder='Year' type='number' /><button onclick='addPlacementRecord()'>Add Record</button></div>
-              </div>
-            </div>
-            <div id='recordsArea'></div>`;
-          renderPlacementRecords();
-        } else {
-          // student/admin: read-only reports
-          const records = getPlacementRecords();
-          main.innerHTML += `
-            <div class='job-card'><h4>Placement Reports</h4><p>Overall analytics & stats</p></div>
-            <div class='report-list'>
-              <strong>Placement Summary</strong>
-              <ul>
-                <li>Placement Rate: 92%</li>
-                <li>Top Departments: CSE, AIML</li>
-                <li>Avg Package: ₹6.2 LPA</li>
-              </ul>
-            </div>
-
-            <div style='margin-top:12px;' class='report-list'>
-              <strong>Records</strong>
-              <table class='data-table'>
-                <thead><tr><th>Student</th><th>Dept</th><th>Placed Company</th><th>Package (LPA)</th><th>Year</th></tr></thead>
-                <tbody>
-                  ${records.map(r => <tr><td>${r.student}</td><td>${r.dept}</td><td>${r.company}</td><td>${r.package}</td><td>${r.year}</td></tr>).join('')}
-                </tbody>
-              </table>
-            </div>`;
-        }
-      } else {
-        main.innerHTML += '<p>Page not found.</p>';
-      }
-    }
-
-    // Storage helpers
-    function getPlacementRecords() {
-      const raw = localStorage.getItem('placementRecords');
-      if (!raw) {
-        localStorage.setItem('placementRecords', JSON.stringify(DEFAULT_RECORDS));
-        return DEFAULT_RECORDS.slice();
-      }
-      try { return JSON.parse(raw); } catch (e) { return DEFAULT_RECORDS.slice(); }
-    }
-
-    function savePlacementRecords(arr) {
-      localStorage.setItem('placementRecords', JSON.stringify(arr));
-    }
-
-    function renderPlacementRecords() {
-      const area = document.getElementById('recordsArea');
-      const records = getPlacementRecords();
-      area.innerHTML = `
-        <table class='data-table'>
-          <thead><tr><th>Student</th><th>Dept</th><th>Company</th><th>Package</th><th>Year</th><th>Action</th></tr></thead>
-          <tbody>
-            ${records.map((r, idx) => `
-              <tr>
-                <td>${r.student}</td>
-                <td>${r.dept}</td>
-                <td>${r.company}</td>
-                <td>${r.package}</td>
-                <td>${r.year}</td>
-                <td><button onclick='removeRecord(${idx})'>Remove</button></td>
-              </tr>
-            `).join('')}
-          </tbody>
+    else if (page === "applications") {
+      main.innerHTML += `
+        <table>
+          <tr><th>Job</th><th>Company</th><th>Status</th></tr>
+          <tr><td>Data Analyst</td><td>DataSolve</td><td>Pending</td></tr>
+          <tr><td>Developer</td><td>TechCorp</td><td>Shortlisted</td></tr>
         </table>`;
     }
 
-    function addPlacementRecord() {
-      const s = document.getElementById('recStudent').value.trim();
-      const d = document.getElementById('recDept').value.trim();
-      const c = document.getElementById('recCompany').value.trim();
-      const p = parseFloat(document.getElementById('recPackage').value) || 0;
-      const y = parseInt(document.getElementById('recYear').value, 10) || new Date().getFullYear();
-      if (!s || !d || !c || !p) { alert('Please fill Student, Dept, Company and Package'); return; }
-      const records = getPlacementRecords();
-      records.push({ student: s, dept: d, company: c, package: p, year: y });
-      savePlacementRecords(records);
-      // clear inputs
-      document.getElementById('recStudent').value = '';
-      document.getElementById('recDept').value = '';
-      document.getElementById('recCompany').value = '';
-      document.getElementById('recPackage').value = '';
-      document.getElementById('recYear').value = '';
-      renderPlacementRecords();
+    else if (page === "reports") {
+      main.innerHTML += `
+        <div class="job-card"><p>Placement Records & Reports</p></div>
+        <table>
+          <tr><th>Student</th><th>Company</th><th>Package</th></tr>
+          <tr><td>Asha</td><td>Google</td><td>15 LPA</td></tr>
+          <tr><td>Rahul</td><td>Microsoft</td><td>12 LPA</td></tr>
+        </table>`;
     }
+  }
 
-    function removeRecord(idx) {
-      if (!confirm('Remove this record?')) return;
-      const records = getPlacementRecords();
-      records.splice(idx, 1);
-      savePlacementRecords(records);
-      renderPlacementRecords();
+  function login() {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("topbar").style.display = "flex";
+    document.getElementById("sidebar").style.display = "block";
+    document.getElementById("main-content").style.display = "block";
+
+    showPage("dashboard", document.querySelector(".sidebar a"));
+  }
+
+  function showLogin() {
+    document.getElementById("login").style.display = "flex";
+    document.getElementById("topbar").style.display = "none";
+    document.getElementById("sidebar").style.display = "none";
+    document.getElementById("main-content").style.display = "none";
+  }
+
+  function validateEmail() {
+    const email = document.getElementById("email").value;
+    const error = document.getElementById("emailError");
+    const button = document.getElementById("loginBtn");
+
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!pattern.test(email)) {
+      error.textContent = "Invalid Email Format";
+      button.disabled = true;
+    } else {
+      error.textContent = "";
+      button.disabled = false;
     }
+  }
 
-    // login flow
-    function login() {
-      try {
-        console.log('login() called');
-        const nameEl = document.getElementById('name');
-        const emailEl = document.getElementById('email');
-        const roleEl = document.getElementById('role');
-        if (!nameEl || !emailEl || !roleEl) { alert('Login elements missing'); return; }
+  document.addEventListener("DOMContentLoaded", showLogin);
+</script>
 
-        const name = nameEl.value.trim();
-        const email = emailEl.value.trim();
-        const role = roleEl.value;
-
-        if (!name || !email) { alert('Please enter name and valid email.'); return; }
-
-        localStorage.setItem('name', name);
-        localStorage.setItem('email', email);
-        localStorage.setItem('role', role);
-
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('topbar').style.display = 'flex';
-        document.getElementById('sidebar').style.display = 'flex';
-        document.getElementById('main-content').style.display = 'block';
-
-        document.getElementById('userBadge').textContent = ${name} (${role.replace('_',' ')});
-
-        // show dashboard
-        const firstLink = document.querySelector('.sidebar a');
-        showPage('dashboard', firstLink || null);
-      } catch (err) {
-        console.error(err);
-        alert('Login failed — check console');
-      }
-    }
-
-    function showLogin() {
-      document.getElementById('login').style.display = 'flex';
-      document.getElementById('topbar').style.display = 'none';
-      document.getElementById('sidebar').style.display = 'none';
-      document.getElementById('main-content').style.display = 'none';
-
-      // clear session
-      localStorage.removeItem('name');
-      localStorage.removeItem('email');
-      localStorage.removeItem('role');
-    }
-
-    function validateEmail() {
-      const email = document.getElementById('email').value;
-      const error = document.getElementById('emailError');
-      const loginBtn = document.getElementById('loginBtn');
-      const pattern = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-      if (!pattern.test(email)) {
-        error.textContent = 'Enter a valid email';
-        loginBtn.disabled = true;
-      } else {
-        error.textContent = '';
-        loginBtn.disabled = false;
-      }
-    }
-
-    // on load restore session if present
-    document.addEventListener('DOMContentLoaded', () => {
-      const savedName = localStorage.getItem('name');
-      const savedRole = localStorage.getItem('role');
-      if (!savedName) {
-        showLogin();
-      } else {
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('topbar').style.display = 'flex';
-        document.getElementById('sidebar').style.display = 'flex';
-        document.getElementById('main-content').style.display = 'block';
-        document.getElementById('userBadge').textContent = ${savedName} (${(savedRole||'student').replace('_',' ')});
-        showPage('dashboard', document.querySelector('.sidebar a'));
-      }
-    });
-  </script>
 </body>
 </html>
