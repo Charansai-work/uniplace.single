@@ -185,10 +185,10 @@
     setActiveLink(element);
     const main = document.getElementById("main-content");
 
-    main.innerHTML = <h3>${page.charAt(0).toUpperCase() + page.slice(1)}</h3>;
+    main.innerHTML = `<h3>${page.charAt(0).toUpperCase() + page.slice(1)}</h3>`;
 
     if (page === "dashboard") {
-      main.innerHTML += <div class="job-card"><p>Welcome to your dashboard!</p></div>;
+      main.innerHTML += `<div class="job-card"><p>Welcome to your dashboard!</p></div>`;
     } 
     
     else if (page === "jobs") {
