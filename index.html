@@ -3,194 +3,175 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UniPlace</title>
+  <title>UniPlace – Enhanced</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
 
-  <!-- Material Dashboard UI -->
   <style>
     :root {
-      --primary: #007bff;
-      --secondary: #6c757d;
-      --bg: #f4f6f9;
-      --card-bg: #ffffff;
-      --sidebar-bg: #1e272e;
-      --sidebar-hover: #3c40c6;
+      --primary:#007bff;
+      --bg:#f4f6f9;
+      --card:#fff;
+      --sidebar:#1e272e;
+      --sidebar-hover:#3c40c6;
     }
+
+    *{box-sizing:border-box}
 
     body {
-      font-family: "Poppins", sans-serif;
-      margin: 0;
-      background: var(--bg);
-      color: #2f3640;
-      transition: 0.3s ease;
+      margin:0;
+      background:var(--bg);
+      font-family:"Poppins",sans-serif;
     }
 
-    /* Top Bar */
+    /* SMALL LOGOUT BUTTON */
+    .logout-btn{
+      background:#fff;
+      color:#007bff;
+      padding:5px 10px;
+      font-size:13px;
+      border-radius:6px;
+      cursor:pointer;
+      border:none;
+      box-shadow:0 2px 4px rgba(0,0,0,0.2);
+      transition:0.2s;
+    }
+    .logout-btn:hover{
+      background:#dce5ff;
+    }
+
+    /* TOPBAR */
     .topbar {
-      background: var(--primary);
-      color: white;
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:var(--primary);
+      padding:12px 22px;
+      color:white;
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
     }
 
-    /* Sidebar */
+    /* SIDEBAR */
     .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 220px;
-      height: 100vh;
-      background: var(--sidebar-bg);
-      padding: 25px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      transition: 0.3s;
+      width:220px;
+      height:100vh;
+      background:var(--sidebar);
+      position:fixed;
+      left:0;top:0;
+      padding-top:20px;
+      display:none;
     }
-    .sidebar h3 {
-      text-align: center;
-      margin-bottom: 10px;
-      color: #fff;
+    .sidebar h3{color:#fff;text-align:center}
+    .sidebar ul{list-style:none;padding:0;margin-top:20px}
+    .sidebar li{margin:10px 0}
+    .sidebar a{
+      display:block;
+      padding:12px 20px;
+      text-decoration:none;
+      color:#fff;
+      border-left:4px solid transparent;
+      transition:0.2s;
     }
-    .sidebar ul { list-style: none; padding: 0; }
-    .sidebar li { margin: 10px 0; }
-    .sidebar a {
-      padding: 12px 20px;
-      display: block;
-      color: white;
-      text-decoration: none;
-      font-size: 15px;
-      border-left: 4px solid transparent;
-      transition: 0.25s;
-    }
-    .sidebar a:hover, .sidebar a.active {
-      background: var(--sidebar-hover);
-      border-left: 4px solid white;
+    .sidebar a.active,.sidebar a:hover{
+      background:var(--sidebar-hover);
+      border-left:4px solid #fff;
     }
 
-    /* Page Content */
-    .content {
-      margin-left: 240px;
-      padding: 24px;
-      animation: fadeIn 0.5s ease;
+    /* MAIN CONTENT */
+    .content{
+      margin-left:240px;
+      padding:25px;
+      display:none;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .card{
+      background:var(--card);
+      padding:20px;
+      border-radius:10px;
+      margin-bottom:20px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.08);
     }
 
-    /* Job Cards */
-    .job-card {
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .job-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    .job-card:hover{
+      transform:translateY(-3px);
+      transition:0.2s;
+      box-shadow:0 6px 14px rgba(0,0,0,0.12);
     }
 
-    /* Login */
-    .login-container {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #dcdde1;
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:white;
+      border-radius:8px;
+      overflow:hidden;
+    }
+    table th{
+      background:#eef2f7;
+      padding:12px;
+    }
+    table td{
+      padding:12px;
+      border-bottom:1px solid #eee;
     }
 
-    .login-box {
-      background: white;
-      width: 360px;
-      padding: 24px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-      animation: fadeIn 0.5s ease;
+    /* LOGIN */
+    .login-container{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#dcdde1;
+    }
+    .login-box{
+      background:white;
+      width:350px;
+      padding:25px;
+      border-radius:10px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.15);
+      text-align:center;
+    }
+    .login-box input,.login-box select{
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+      border-radius:6px;
+      border:1px solid #ccc;
     }
 
-    .login-box input, .login-box select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      margin-top: 10px;
-      font-size: 15px;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 15px;
-      background: var(--primary);
-      border: none;
-      padding: 10px;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    table.data-table th, table.data-table td {
-      padding: 12px;
-      border-bottom: 1px solid #eee;
-    }
-    table.data-table th {
-      background: #f7f9fb;
-    }
-
-    .report-list {
-      background: white;
-      padding: 12px;
-      border-radius: 8px;
-    }
   </style>
 </head>
+
 <body>
 
+  <!-- TOPBAR -->
   <div class="topbar" id="topbar" style="display:none">
-    <div>
-      <h2>UniPlace</h2>
-      <div id="userBadge" class="muted"></div>
-    </div>
-    <button onclick="showLogin()">Logout</button>
+      <h2 style="margin:0">UniPlace</h2>
+      <button class="logout-btn" onclick="showLogin()">Logout</button>
   </div>
 
-  <div class="sidebar" id="sidebar" style="display:none">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
     <h3>Menu</h3>
     <ul>
-      <li><a href="#" onclick="showPage('dashboard', this)" class="active">Dashboard</a></li>
-      <li><a href="#" onclick="showPage('jobs', this)">Jobs</a></li>
-      <li><a href="#" onclick="showPage('applications', this)">Applications</a></li>
-      <li><a href="#" onclick="showPage('reports', this)">Reports</a></li>
+      <li><a class="active" onclick="showPage('dashboard', this)">Dashboard</a></li>
+      <li><a onclick="showPage('jobs', this)">Jobs</a></li>
+      <li><a onclick="showPage('applications', this)">Applications</a></li>
+      <li><a onclick="showPage('reports', this)">Reports</a></li>
     </ul>
   </div>
 
-  <div class="content" id="main-content" style="display:none"></div>
+  <!-- MAIN -->
+  <div class="content" id="main-content"></div>
 
-  <!-- Login -->
+  <!-- LOGIN -->
   <div class="login-container" id="login">
     <div class="login-box">
       <h2>Login</h2>
-      <input type="text" id="name" placeholder="Name" />
-      <input type="email" id="email" placeholder="Email" oninput="validateEmail()" />
-      <p id="emailError" style="color:red; font-size:13px;"></p>
+
+      <input id="name" placeholder="Name" />
+      <input id="email" placeholder="Email" oninput="validateEmail()" />
+      <small id="emailError" style="color:red"></small>
 
       <select id="role">
         <option value="student">Student</option>
@@ -198,116 +179,165 @@
         <option value="admin">Admin</option>
       </select>
 
-      <button id="loginBtn" onclick="login()" disabled>Login</button>
+      <button id="loginBtn" onclick="login()" disabled
+              style="margin-top:15px;background:#007bff;color:white;padding:10px;border:none;border-radius:6px">
+        Login
+      </button>
     </div>
   </div>
 
+
 <script>
 
-// ⭐ FIXED: All template literals in backticks
-function showPage(page, el) {
-  document.querySelectorAll(".sidebar a").forEach(a => a.classList.remove("active"));
-  if (el) el.classList.add("active");
+/* ------------------- PAGE SWITCHER ------------------- */
+function showPage(page, el){
+    document.querySelectorAll(".sidebar a").forEach(a => a.classList.remove("active"));
+    el.classList.add("active");
 
-  const main = document.getElementById("main-content");
-  const role = localStorage.getItem("role");
-  const name = localStorage.getItem("name");
+    const main = document.getElementById("main-content");
+    const name = localStorage.getItem("name");
+    const role = localStorage.getItem("role");
 
-  if (page === "dashboard") {
-    main.innerHTML = `
-      <h3>Dashboard</h3>
-      <div class="job-card"><h4>Welcome, ${name}</h4><p>Role: ${role}</p></div>
-    `;
-  }
+    if(page === "dashboard") {
+        main.innerHTML = `
+        <h2>Dashboard</h2>
+        <div class='card'>
+            <h3>Hello, ${name}</h3>
+            <p>Role: ${role.replace("_"," ")}</p>
+        </div>
 
-  else if (page === "jobs") {
-    main.innerHTML = `
-      <h3>Jobs</h3>
-      <div class="job-card"><h4>Software Engineer</h4><p>CodeWave</p></div>
-      <div class="job-card"><h4>AI Intern</h4><p>SmartAI</p></div>
-    `;
-  }
+        <div style="display:flex; gap:20px; flex-wrap:wrap;">
+            <div class='card' style="width:250px;"><h3>128</h3><p>Total Jobs</p></div>
+            <div class='card' style="width:250px;"><h3>24</h3><p>My Applications</p></div>
+            <div class='card' style="width:250px;"><h3>8</h3><p>Shortlisted</p></div>
+        </div>
+        `;
+    }
 
-  else if (page === "applications") {
-    main.innerHTML = `
-      <h3>My Applications</h3>
-      <table class="data-table">
-        <tr><th>Job</th><th>Company</th><th>Status</th></tr>
-        <tr><td>Frontend Dev</td><td>TechCorp</td><td style="color:green">Shortlisted</td></tr>
-        <tr><td>AI Intern</td><td>SmartAI</td><td style="color:orange">Pending</td></tr>
-      </table>
-    `;
-  }
+    if(page === "jobs") {
+        main.innerHTML = `
+        <h2>Latest Jobs</h2>
+        <div class='card job-card'><h3>Frontend Developer</h3><p>TechCorp – Remote</p></div>
+        <div class='card job-card'><h3>AI Intern</h3><p>SmartAI – Hyderabad</p></div>
+        <div class='card job-card'><h3>Backend Engineer</h3><p>CodeWave – Bengaluru</p></div>
+        <div class='card job-card'><h3>Data Analyst</h3><p>DataSolve – Chennai</p></div>
+        `;
+    }
 
-  else if (page === "reports") {
-    main.innerHTML = `
-      <h3>Reports</h3>
-      <div class="report-list">
-        <p>Total Jobs: 128</p>
-        <p>Average Package: ₹6.2 LPA</p>
-      </div>
-    `;
-  }
+    if(page === "applications") {
+        main.innerHTML = `
+        <h2>My Applications</h2>
+        <table>
+           <tr><th>Job</th><th>Company</th><th>Status</th></tr>
+
+           <tr><td>Frontend Developer</td><td>TechCorp</td><td style="color:green">Shortlisted</td></tr>
+           <tr><td>Backend Engineer</td><td>CodeWave</td><td style="color:orange">Pending</td></tr>
+           <tr><td>Data Analyst</td><td>DataSolve</td><td style="color:red">Rejected</td></tr>
+           <tr><td>UX Designer</td><td>CreativeLabs</td><td>Pending</td></tr>
+           <tr><td>Cloud Intern</td><td>AWS</td><td style="color:green">Shortlisted</td></tr>
+           <tr><td>Java Developer</td><td>Infosys</td><td style="color:red">Rejected</td></tr>
+           <tr><td>Automation Tester</td><td>TCS</td><td style="color:orange">Pending</td></tr>
+           <tr><td>AI Intern</td><td>SmartAI</td><td>Pending</td></tr>
+
+        </table>
+        `;
+    }
+
+    if(page === "reports") {
+        main.innerHTML = `
+        <h2>Reports & Analytics</h2>
+
+        <div class='card'>
+            <h3>Placement Summary</h3>
+            <p>Placement Rate: <strong>92%</strong></p>
+            <p>Average Package: <strong>₹6.2 LPA</strong></p>
+        </div>
+
+        <div class='card'>
+            <h3>Top Recruiters</h3>
+            <ul>
+              <li>CodeWave</li>
+              <li>SmartAI</li>
+              <li>TCS</li>
+              <li>Infosys</li>
+            </ul>
+        </div>
+
+        <div class='card'>
+            <h3>Department Performance</h3>
+            <p>CSE – 96%</p>
+            <p>AIML – 93%</p>
+            <p>ECE – 84%</p>
+        </div>
+
+        <div class='card'>
+            <h3>Student Records</h3>
+            <table>
+              <tr><th>Name</th><th>Dept</th><th>Company</th><th>Package</th></tr>
+              <tr><td>Rahul Kumar</td><td>CSE</td><td>CodeWave</td><td>8.2 LPA</td></tr>
+              <tr><td>Asha S</td><td>AIML</td><td>SmartAI</td><td>7.5 LPA</td></tr>
+              <tr><td>Sandeep R</td><td>ECE</td><td>TCS</td><td>4.2 LPA</td></tr>
+              <tr><td>Meena R</td><td>CSE</td><td>Dell</td><td>6.8 LPA</td></tr>
+            </table>
+        </div>
+        `;
+    }
+
 }
 
-function login() {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const role = document.getElementById("role").value;
 
-  if (!name || !email) return;
+/* ------------------- LOGIN SYSTEM ------------------- */
+function login(){
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const role = document.getElementById("role").value;
 
-  localStorage.setItem("name", name);
-  localStorage.setItem("email", email);
-  localStorage.setItem("role", role);
+    if(!name || !email) return;
 
-  document.getElementById("login").style.display = "none";
-  document.getElementById("topbar").style.display = "flex";
-  document.getElementById("sidebar").style.display = "flex";
-  document.getElementById("main-content").style.display = "block";
+    localStorage.setItem("name",name);
+    localStorage.setItem("email",email);
+    localStorage.setItem("role",role);
 
-  document.getElementById("userBadge").textContent = `${name} (${role})`;
-
-  showPage("dashboard", document.querySelector(".sidebar a"));
-}
-
-function showLogin() {
-  localStorage.clear();
-  document.getElementById("login").style.display = "flex";
-  document.getElementById("topbar").style.display = "none";
-  document.getElementById("sidebar").style.display = "none";
-  document.getElementById("main-content").style.display = "none";
-}
-
-function validateEmail() {
-  const email = document.getElementById("email").value;
-  const loginBtn = document.getElementById("loginBtn");
-  const msg = document.getElementById("emailError");
-
-  if (/^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email)) {
-    msg.textContent = "";
-    loginBtn.disabled = false;
-  } else {
-    msg.textContent = "Enter a valid email";
-    loginBtn.disabled = true;
-  }
-}
-
-// Auto-login if session exists
-document.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("name")) {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("topbar").style.display = "flex";
-    document.getElementById("sidebar").style.display = "flex";
-    document.getElementById("main-content").style.display = "block";
-
-    document.getElementById("userBadge").textContent =
-      `${localStorage.getItem("name")} (${localStorage.getItem("role")})`;
+    document.getElementById("login").style.display="none";
+    document.getElementById("topbar").style.display="flex";
+    document.getElementById("sidebar").style.display="block";
+    document.getElementById("main-content").style.display="block";
 
     showPage("dashboard", document.querySelector(".sidebar a"));
-  } else {
-    showLogin();
-  }
+}
+
+function showLogin(){
+    localStorage.clear();
+    document.getElementById("login").style.display="flex";
+    document.getElementById("topbar").style.display="none";
+    document.getElementById("sidebar").style.display="none";
+    document.getElementById("main-content").style.display="none";
+}
+
+function validateEmail(){
+    const email = document.getElementById("email").value;
+    const pattern = /^[\w\.]+@[\w]+\.[a-z]{2,3}$/;
+    const msg = document.getElementById("emailError");
+    const btn = document.getElementById("loginBtn");
+
+    if(pattern.test(email)){
+        msg.textContent = "";
+        btn.disabled = false;
+    } else {
+        msg.textContent = "Enter valid email";
+        btn.disabled = true;
+    }
+}
+
+/* Restore if logged in */
+document.addEventListener("DOMContentLoaded",()=>{
+    if(localStorage.getItem("name")){
+        document.getElementById("login").style.display="none";
+        document.getElementById("topbar").style.display="flex";
+        document.getElementById("sidebar").style.display="block";
+        document.getElementById("main-content").style.display="block";
+        showPage("dashboard", document.querySelector(".sidebar a"));
+    }
 });
 
 </script>
