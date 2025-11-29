@@ -137,16 +137,24 @@
       background: grey;
       cursor: not-allowed;
     }
+
+    /* Small helpers */
+    .muted { color: #666; font-size: 14px; }
+    .inline { display:inline-block; }
+    .form-row { display:flex; gap:8px; align-items:center; margin-top:10px; }
+    .form-row input { flex:1 }
   </style>
 </head>
 
 <body>
-  <div class="topbar" id="topbar">
-    <h2>UniPlace</h2>
-    <button onclick="showLogin()">Logout</button>
+  <div class="topbar" id="topbar" style="display:none">
+    <div id="top-left"><h2 style="margin:0">UniPlace</h2><div id="userBadge" class="muted" style="display:inline;margin-left:12px"></div></div>
+    <div>
+      <button onclick="showLogin()">Logout</button>
+    </div>
   </div>
 
-  <div class="sidebar" id="sidebar">
+  <div class="sidebar" id="sidebar" style="display:none">
     <h3>Menu</h3>
     <ul>
       <li><a href="#" onclick="showPage('dashboard', this)" class="active">Dashboard</a></li>
@@ -156,7 +164,7 @@
     </ul>
   </div>
 
-  <div class="content" id="main-content">
+  <div class="content" id="main-content" style="display:none">
     <h3>Welcome to UniPlace!</h3>
   </div>
 
@@ -169,6 +177,7 @@
       <p id="emailError" style="color:red;font-size:12px;"></p>
       <select id="role">
         <option value="student">Student</option>
+        <option value="placement_officer">Placement Officer</option>
         <option value="admin">Admin</option>
       </select>
       <button id="loginBtn" onclick="login()" disabled>Login</button>
@@ -176,21 +185,32 @@
   </div>
 
 <script>
+  // Sample placement records (for placement officer role). In a real app you'd fetch this from a server.
+  window.placementRecords = [
+    { student: 'Asha', company: 'Google', package: '15 LPA', year: 2025 },
+    { student: 'Rahul', company: 'Microsoft', package: '12 LPA', year: 2025 }
+  ];
+
   function setActiveLink(current) {
     document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-    current.classList.add('active');
+    if (current) current.classList.add('active');
   }
 
   function showPage(page, element) {
-    setActiveLink(element);
+    if (element) setActiveLink(element);
     const main = document.getElementById("main-content");
+    const role = localStorage.getItem('role') || 'student';
+    const name = localStorage.getItem('name') || '';
 
-    main.innerHTML = `<h3>${page.charAt(0).toUpperCase() + page.slice(1)}</h3>`;
+    main.innerHTML = <h3>${page.charAt(0).toUpperCase() + page.slice(1)}</h3>;
 
     if (page === "dashboard") {
-      main.innerHTML += `<div class="job-card"><p>Welcome to your dashboard!</p></div>`;
+      if (role === 'placement_officer') {
+        main.innerHTML += <div class="job-card"><h4>Officer Dashboard</h4><p>Welcome back, ${name}. You can manage placement records and view reports here.</p></div>;
+      } else {
+        main.innerHTML += <div class="job-card"><p>Welcome to your dashboard!</p></div>;
+      }
     } 
-    
     else if (page === "jobs") {
       main.innerHTML += `
         <div class="job-card"><h4>Frontend Developer</h4><p>TechCorp - Remote</p></div>
@@ -207,36 +227,109 @@
     }
 
     else if (page === "reports") {
-      main.innerHTML += `
-        <div class="job-card"><p>Placement Records & Reports</p></div>
-        <table>
-          <tr><th>Student</th><th>Company</th><th>Package</th></tr>
-          <tr><td>Asha</td><td>Google</td><td>15 LPA</td></tr>
-          <tr><td>Rahul</td><td>Microsoft</td><td>12 LPA</td></tr>
-        </table>`;
+      if (role === 'placement_officer') {
+        // Officer view: show editable records + form to add new
+        main.innerHTML += `
+          <div class="job-card"><h4>Placement Records & Reports (Officer)</h4>
+            <p class="muted">Manage placed students and export reports.</p>
+            <div style="margin-top:12px">
+              <div class="form-row"><input id="recStudent" placeholder="Student Name" /><input id="recCompany" placeholder="Company" /></div>
+              <div class="form-row"><input id="recPackage" placeholder="Package (e.g. 10 LPA)" /><input id="recYear" type="number" placeholder="Year" /></div>
+              <div style="margin-top:10px"><button onclick="addPlacementRecord()">Add Record</button></div>
+            </div>
+          </div>
+          <div id="recordsArea"></div>`;
+        renderPlacementRecords();
+      } else {
+        // Student and Admin view: read-only reports
+        main.innerHTML += `
+          <div class="job-card"><p>Placement Records & Reports</p></div>
+          <table>
+            <tr><th>Student</th><th>Company</th><th>Package</th><th>Year</th></tr>
+            ${window.placementRecords.map(r => <tr><td>${r.student}</td><td>${r.company}</td><td>${r.package}</td><td>${r.year}</td></tr>).join('')}
+          </table>`;
+      }
     }
   }
 
-  function login() {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("topbar").style.display = "flex";
-    document.getElementById("sidebar").style.display = "block";
-    document.getElementById("main-content").style.display = "block";
+  function renderPlacementRecords() {
+    const area = document.getElementById('recordsArea');
+    area.innerHTML = `
+      <table>
+        <tr><th>Student</th><th>Company</th><th>Package</th><th>Year</th><th>Action</th></tr>
+        ${window.placementRecords.map((r, idx) => `
+          <tr>
+            <td>${r.student}</td>
+            <td>${r.company}</td>
+            <td>${r.package}</td>
+            <td>${r.year}</td>
+            <td><button onclick="removeRecord(${idx})">Remove</button></td>
+          </tr>
+        `).join('')}
+      </table>
+    `;
+  }
 
-    showPage("dashboard", document.querySelector(".sidebar a"));
+  function addPlacementRecord() {
+    const s = document.getElementById('recStudent').value.trim();
+    const c = document.getElementById('recCompany').value.trim();
+    const p = document.getElementById('recPackage').value.trim();
+    const y = parseInt(document.getElementById('recYear').value, 10) || new Date().getFullYear();
+    if (!s || !c || !p) { alert('Please fill student, company and package.'); return; }
+    window.placementRecords.push({ student: s, company: c, package: p, year: y });
+    document.getElementById('recStudent').value = '';
+    document.getElementById('recCompany').value = '';
+    document.getElementById('recPackage').value = '';
+    document.getElementById('recYear').value = '';
+    renderPlacementRecords();
+  }
+
+  function removeRecord(idx) {
+    if (!confirm('Remove this record?')) return;
+    window.placementRecords.splice(idx, 1);
+    renderPlacementRecords();
+  }
+
+  function login() {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const role = document.getElementById('role').value;
+    if (!name || !email) return alert('Please enter name and valid email.');
+
+    // save to local storage (simple persistence for demo)
+    localStorage.setItem('name', name);
+    localStorage.setItem('email', email);
+    localStorage.setItem('role', role);
+
+    // show UI
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('topbar').style.display = 'flex';
+    document.getElementById('sidebar').style.display = 'block';
+    document.getElementById('main-content').style.display = 'block';
+
+    // update topbar badge
+    document.getElementById('userBadge').textContent = ${name} (${role.replace('_',' ')});
+
+    // default to dashboard
+    showPage('dashboard', document.querySelector('.sidebar a'));
   }
 
   function showLogin() {
-    document.getElementById("login").style.display = "flex";
-    document.getElementById("topbar").style.display = "none";
-    document.getElementById("sidebar").style.display = "none";
-    document.getElementById("main-content").style.display = "none";
+    document.getElementById('login').style.display = 'flex';
+    document.getElementById('topbar').style.display = 'none';
+    document.getElementById('sidebar').style.display = 'none';
+    document.getElementById('main-content').style.display = 'none';
+
+    // clear saved session for demo
+    localStorage.removeItem('name');
+    localStorage.removeItem('email');
+    localStorage.removeItem('role');
   }
 
   function validateEmail() {
-    const email = document.getElementById("email").value;
-    const error = document.getElementById("emailError");
-    const button = document.getElementById("loginBtn");
+    const email = document.getElementById('email').value;
+    const error = document.getElementById('emailError');
+    const button = document.getElementById('loginBtn');
 
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!pattern.test(email)) {
@@ -248,7 +341,22 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", showLogin);
+  // If user already logged in (demo) auto-fill UI
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedName = localStorage.getItem('name');
+    const savedRole = localStorage.getItem('role');
+    if (!savedName) {
+      showLogin();
+    } else {
+      // restore UI
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('topbar').style.display = 'flex';
+      document.getElementById('sidebar').style.display = 'block';
+      document.getElementById('main-content').style.display = 'block';
+      document.getElementById('userBadge').textContent = ${savedName} (${(savedRole||'student').replace('_',' ')});
+      showPage('dashboard', document.querySelector('.sidebar a'));
+    }
+  });
 </script>
 
 </body>
