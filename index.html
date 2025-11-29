@@ -3,389 +3,343 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UniPlace – Role Based Portal</title>
+  <title>UniPlace – Enhanced</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --primary: #0d6efd;
-      --secondary: #6c757d;
-      --bg: #f4f6f9;
-      --sidebar-bg: #1e272e;
-      --sidebar-hover: #3c40c6;
-      --card-bg: white;
+      --primary:#007bff;
+      --bg:#f4f6f9;
+      --card:#fff;
+      --sidebar:#1e272e;
+      --sidebar-hover:#3c40c6;
     }
+
+    *{box-sizing:border-box}
+
     body {
-      margin: 0;
-      background: var(--bg);
-      font-family: Poppins, sans-serif;
+      margin:0;
+      background:var(--bg);
+      font-family:"Poppins",sans-serif;
+    }
+
+    /* SMALL LOGOUT BUTTON */
+    .logout-btn{
+      background:#fff;
+      color:#007bff;
+      padding:5px 10px;
+      font-size:13px;
+      border-radius:6px;
+      cursor:pointer;
+      border:none;
+      box-shadow:0 2px 4px rgba(0,0,0,0.2);
+      transition:0.2s;
+    }
+    .logout-btn:hover{
+      background:#dce5ff;
     }
 
     /* TOPBAR */
     .topbar {
-      display: none;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--primary);
-      color: white;
-      padding: 12px 20px;
-    }
-    .topbar button {
-      background: #fff !important;
-      color: #000;
-      border: none;
-      padding: 6px 12px;
-      font-size: 13px;
-      border-radius: 6px;
-      cursor: pointer;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:var(--primary);
+      padding:12px 22px;
+      color:white;
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
     }
 
     /* SIDEBAR */
     .sidebar {
-      position: fixed;
-      top: 0; left: 0;
-      width: 220px;
-      height: 100%;
-      background: var(--sidebar-bg);
-      padding-top: 20px;
-      display: none;
+      width:220px;
+      height:100vh;
+      background:var(--sidebar);
+      position:fixed;
+      left:0;top:0;
+      padding-top:20px;
+      display:none;
     }
-    .sidebar ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
+    .sidebar h3{color:#fff;text-align:center}
+    .sidebar ul{list-style:none;padding:0;margin-top:20px}
+    .sidebar li{margin:10px 0}
+    .sidebar a{
+      display:block;
+      padding:12px 20px;
+      text-decoration:none;
+      color:#fff;
+      border-left:4px solid transparent;
+      transition:0.2s;
     }
-    .sidebar a {
-      display: block;
-      padding: 12px 20px;
-      color: white;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-    .sidebar a.active, .sidebar a:hover {
-      background: var(--sidebar-hover);
+    .sidebar a.active,.sidebar a:hover{
+      background:var(--sidebar-hover);
+      border-left:4px solid #fff;
     }
 
-    /* CONTENT */
-    .content {
-      margin-left: 230px;
-      padding: 20px;
-      display: none;
-      animation: fade 0.3s ease;
+    /* MAIN CONTENT */
+    .content{
+      margin-left:240px;
+      padding:25px;
+      display:none;
     }
-    @keyframes fade { from {opacity: 0;} to {opacity: 1;} }
 
-    .job-card, .app-card, .record-card {
-      background: white;
-      padding: 16px;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    .card{
+      background:var(--card);
+      padding:20px;
+      border-radius:10px;
+      margin-bottom:20px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    .job-card:hover{
+      transform:translateY(-3px);
+      transition:0.2s;
+      box-shadow:0 6px 14px rgba(0,0,0,0.12);
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:white;
+      border-radius:8px;
+      overflow:hidden;
+    }
+    table th{
+      background:#eef2f7;
+      padding:12px;
+    }
+    table td{
+      padding:12px;
+      border-bottom:1px solid #eee;
     }
 
     /* LOGIN */
-    .login-container {
-      display: flex;
-      height: 100vh;
-      justify-content: center;
-      align-items: center;
+    .login-container{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#dcdde1;
     }
-    .login-box {
-      width: 360px;
-      padding: 24px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
-      text-align: center;
+    .login-box{
+      background:white;
+      width:350px;
+      padding:25px;
+      border-radius:10px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.15);
+      text-align:center;
     }
-    .login-box input, .login-box select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      width: 100%;
-      margin-top: 15px;
-      padding: 12px;
-      background: var(--primary);
-      border: none;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
+    .login-box input,.login-box select{
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+      border-radius:6px;
+      border:1px solid #ccc;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      margin-top: 10px;
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    table th, table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid #eee;
-    }
-    table th {
-      background: #f2f2f2;
-    }
   </style>
 </head>
 
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar" id="topbar">
-  <h2>UniPlace</h2>
-  <button onclick="logout()">Logout</button>
-</div>
-
-<!-- SIDEBAR -->
-<div class="sidebar" id="sidebar">
-  <ul>
-    <li><a class="active" onclick="showPage('dashboard', this)">Dashboard</a></li>
-    <li><a onclick="showPage('jobs', this)">Jobs</a></li>
-    <li><a onclick="showPage('applications', this)">Applications</a></li>
-    <li><a onclick="showPage('records', this)">Records</a></li>
-    <li><a onclick="showPage('reports', this)">Reports</a></li>
-  </ul>
-</div>
-
-<!-- CONTENT -->
-<div class="content" id="main"></div>
-
-<!-- LOGIN -->
-<div class="login-container" id="login">
-  <div class="login-box">
-    <h2>Login</h2>
-    <input id="name" placeholder="Name">
-    <input id="email" placeholder="Email">
-    <select id="role">
-      <option value="student">Student</option>
-      <option value="officer">Placement Officer</option>
-      <option value="admin">Admin</option>
-    </select>
-    <button onclick="loginUser()">Login</button>
+  <!-- TOPBAR -->
+  <div class="topbar" id="topbar" style="display:none">
+      <h2 style="margin:0">UniPlace</h2>
+      <button class="logout-btn" onclick="showLogin()">Logout</button>
   </div>
-</div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <h3>Menu</h3>
+    <ul>
+      <li><a class="active" onclick="showPage('dashboard', this)">Dashboard</a></li>
+      <li><a onclick="showPage('jobs', this)">Jobs</a></li>
+      <li><a onclick="showPage('applications', this)">Applications</a></li>
+      <li><a onclick="showPage('reports', this)">Reports</a></li>
+    </ul>
+  </div>
+
+  <!-- MAIN -->
+  <div class="content" id="main-content"></div>
+
+  <!-- LOGIN -->
+  <div class="login-container" id="login">
+    <div class="login-box">
+      <h2>Login</h2>
+
+      <input id="name" placeholder="Name" />
+      <input id="email" placeholder="Email" oninput="validateEmail()" />
+      <small id="emailError" style="color:red"></small>
+
+      <select id="role">
+        <option value="student">Student</option>
+        <option value="placement_officer">Placement Officer</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <button id="loginBtn" onclick="login()" disabled
+              style="margin-top:15px;background:#007bff;color:white;padding:10px;border:none;border-radius:6px">
+        Login
+      </button>
+    </div>
+  </div>
+
 
 <script>
-/* ============================
-   ROLE-BASED DATA (UPDATED)
-============================ */
 
-const DATA = {
-  student: {
-    applications: [
-      { job:"Frontend Developer Intern", company:"Infosys", status:"Shortlisted", applied:"2025-10-21" },
-      { job:"Python Developer", company:"TCS", status:"Pending", applied:"2025-11-02" },
-      { job:"Data Analyst Intern", company:"Capgemini", status:"Rejected", applied:"2025-09-14" }
-    ],
-    reports: `
-      <ul>
-        <li>Your Placement Eligibility: Strong</li>
-        <li>Upcoming Drives: 4</li>
-        <li>Profile Strength: 82%</li>
-      </ul>
-    `
-  },
-
-  officer: {
-    /* Editable placement records */
-    records: [
-      { name:"Neha R", dept:"CSE", company:"Google", pkg:18, year:2025 },
-      { name:"Vishal K", dept:"AIML", company:"Microsoft", pkg:12, year:2025 },
-      { name:"Arjun S", dept:"ECE", company:"Amazon", pkg:10, year:2025 },
-      { name:"Sneha M", dept:"IT", company:"Wipro", pkg:6, year:2025 }
-    ],
-
-    /* Officer sees pending applications */
-    pendingApplications: [
-      { student:"Rahul", job:"Java Developer", company:"Infosys", applied:"2025-11-10" },
-      { student:"Preeti", job:"UI Designer", company:"Adobe", applied:"2025-11-06" },
-      { student:"Karan", job:"Cloud Intern", company:"Tech Mahindra", applied:"2025-11-12" },
-      { student:"Sanjay", job:"Full Stack Intern", company:"Zoho", applied:"2025-10-28" }
-    ],
-
-    reports: `
-      <ul>
-        <li>Total Students Placed: 522</li>
-        <li>Highest Package: 32 LPA</li>
-        <li>Active Companies This Year: 114</li>
-        <li>Upcoming Drives: 9 Companies</li>
-      </ul>
-    `
-  },
-
-  admin: {
-    /* Admin sees all applications */
-    allApplications: [
-      { name:"Rohit", job:"DevOps Engineer", company:"Amazon", status:"Selected", applied:"2025-11-01" },
-      { name:"Asha", job:"ML Engineer", company:"DeepMind", status:"Pending", applied:"2025-11-03" },
-      { name:"Kiran", job:"React Developer", company:"TCS", status:"Rejected", applied:"2025-09-20" },
-      { name:"Sita", job:"AI Intern", company:"Google", status:"Pending", applied:"2025-10-29" },
-      { name:"Mahesh", job:"Backend Developer", company:"Cognizant", status:"Selected", applied:"2025-11-05" }
-    ],
-
-    /* Admin sees all placement records */
-    allRecords: [
-      { name:"Ravi", dept:"CSE", company:"Amazon", pkg:18 },
-      { name:"Zara", dept:"IT", company:"Oracle", pkg:10 },
-      { name:"Manoj", dept:"EEE", company:"Zoho", pkg:6 },
-      { name:"Priya", dept:"CSE", company:"Google", pkg:25 },
-      { name:"Karthik", dept:"AIML", company:"Meta", pkg:30 }
-    ],
-
-    reports: `
-      <ul>
-        <li>System Health: OK</li>
-        <li>Total Registered Users: 1237</li>
-        <li>Database Size: 52MB</li>
-        <li>Overall Placement Rate: 91%</li>
-      </ul>
-    `
-  }
-};
-
-
-/* ============================
-     LOGIN
-============================ */
-function loginUser() {
-  let name = document.getElementById("name").value;
-  let role = document.getElementById("role").value;
-
-  localStorage.setItem("name", name);
-  localStorage.setItem("role", role);
-
-  document.getElementById("login").style.display = "none";
-  document.getElementById("topbar").style.display = "flex";
-  document.getElementById("sidebar").style.display = "block";
-  document.getElementById("main").style.display = "block";
-
-  showPage("dashboard");
-}
-
-
-/* ============================
-     LOGOUT
-============================ */
-function logout() {
-  localStorage.clear();
-  location.reload();
-}
-
-
-/* ============================
-     PAGE RENDERING
-============================ */
-function showPage(page, el) {
-
-  if (el) {
-    document.querySelectorAll(".sidebar a").forEach(a=>a.classList.remove("active"));
+/* ------------------- PAGE SWITCHER ------------------- */
+function showPage(page, el){
+    document.querySelectorAll(".sidebar a").forEach(a => a.classList.remove("active"));
     el.classList.add("active");
-  }
 
-  const role = localStorage.getItem("role");
-  const area = document.getElementById("main");
-  area.innerHTML = `<h2>${page.toUpperCase()}</h2>`;
+    const main = document.getElementById("main-content");
+    const name = localStorage.getItem("name");
+    const role = localStorage.getItem("role");
 
-  /* DASHBOARD */
-  if (page === "dashboard") {
-    area.innerHTML += `
-      <div class="job-card">
-        <h3>Welcome, ${localStorage.getItem("name")}!</h3>
-        <p>Your Role: ${role.toUpperCase()}</p>
-      </div>`;
-  }
+    if(page === "dashboard") {
+        main.innerHTML = `
+        <h2>Dashboard</h2>
+        <div class='card'>
+            <h3>Hello, ${name}</h3>
+            <p>Role: ${role.replace("_"," ")}</p>
+        </div>
 
-  /* JOBS */
-  if (page === "jobs") {
-    area.innerHTML += `
-      <div class="job-card"><h3>Software Engineer</h3><p>Google - Bangalore</p></div>
-      <div class="job-card"><h3>Data Scientist</h3><p>Amazon - Hyderabad</p></div>
-      <div class="job-card"><h3>UI Designer</h3><p>Adobe - Chennai</p></div>
-    `;
-  }
-
-  /* APPLICATIONS */
-  if (page === "applications") {
-
-    if (role === "student") {
-      DATA.student.applications.forEach(a=>{
-        area.innerHTML += `<div class="app-card">
-          <strong>${a.job}</strong><p>${a.company}</p><p>Status: ${a.status}</p>
-        </div>`;
-      });
+        <div style="display:flex; gap:20px; flex-wrap:wrap;">
+            <div class='card' style="width:250px;"><h3>128</h3><p>Total Jobs</p></div>
+            <div class='card' style="width:250px;"><h3>24</h3><p>My Applications</p></div>
+            <div class='card' style="width:250px;"><h3>8</h3><p>Shortlisted</p></div>
+        </div>
+        `;
     }
 
-    else if (role === "officer") {
-      DATA.officer.pendingApplications.forEach(a=>{
-        area.innerHTML += `<div class="app-card">
-          <strong>${a.student}</strong><p>${a.job} @ ${a.company}</p>
-        </div>`;
-      });
+    if(page === "jobs") {
+        main.innerHTML = `
+        <h2>Latest Jobs</h2>
+        <div class='card job-card'><h3>Frontend Developer</h3><p>TechCorp – Remote</p></div>
+        <div class='card job-card'><h3>AI Intern</h3><p>SmartAI – Hyderabad</p></div>
+        <div class='card job-card'><h3>Backend Engineer</h3><p>CodeWave – Bengaluru</p></div>
+        <div class='card job-card'><h3>Data Analyst</h3><p>DataSolve – Chennai</p></div>
+        `;
     }
 
-    else {
-      DATA.admin.allApplications.forEach(a=>{
-        area.innerHTML += `<div class="app-card">
-          <strong>${a.name}</strong><p>${a.job} - ${a.company}</p>
-          <p>Status: ${a.status}</p>
-        </div>`;
-      });
+    if(page === "applications") {
+        main.innerHTML = `
+        <h2>My Applications</h2>
+        <table>
+           <tr><th>Job</th><th>Company</th><th>Status</th></tr>
+
+           <tr><td>Frontend Developer</td><td>TechCorp</td><td style="color:green">Shortlisted</td></tr>
+           <tr><td>Backend Engineer</td><td>CodeWave</td><td style="color:orange">Pending</td></tr>
+           <tr><td>Data Analyst</td><td>DataSolve</td><td style="color:red">Rejected</td></tr>
+           <tr><td>UX Designer</td><td>CreativeLabs</td><td>Pending</td></tr>
+           <tr><td>Cloud Intern</td><td>AWS</td><td style="color:green">Shortlisted</td></tr>
+           <tr><td>Java Developer</td><td>Infosys</td><td style="color:red">Rejected</td></tr>
+           <tr><td>Automation Tester</td><td>TCS</td><td style="color:orange">Pending</td></tr>
+           <tr><td>AI Intern</td><td>SmartAI</td><td>Pending</td></tr>
+
+        </table>
+        `;
     }
 
-  }
+    if(page === "reports") {
+        main.innerHTML = `
+        <h2>Reports & Analytics</h2>
 
-  /* RECORDS */
-  if (page === "records") {
+        <div class='card'>
+            <h3>Placement Summary</h3>
+            <p>Placement Rate: <strong>92%</strong></p>
+            <p>Average Package: <strong>₹6.2 LPA</strong></p>
+        </div>
 
-    if (role === "officer") {
-      DATA.officer.records.forEach(r=>{
-        area.innerHTML += `<div class="record-card">
-          <strong>${r.name}</strong>
-          <p>${r.dept} → ${r.company} (${r.pkg} LPA)</p>
-        </div>`;
-      });
+        <div class='card'>
+            <h3>Top Recruiters</h3>
+            <ul>
+              <li>CodeWave</li>
+              <li>SmartAI</li>
+              <li>TCS</li>
+              <li>Infosys</li>
+            </ul>
+        </div>
+
+        <div class='card'>
+            <h3>Department Performance</h3>
+            <p>CSE – 96%</p>
+            <p>AIML – 93%</p>
+            <p>ECE – 84%</p>
+        </div>
+
+        <div class='card'>
+            <h3>Student Records</h3>
+            <table>
+              <tr><th>Name</th><th>Dept</th><th>Company</th><th>Package</th></tr>
+              <tr><td>Rahul Kumar</td><td>CSE</td><td>CodeWave</td><td>8.2 LPA</td></tr>
+              <tr><td>Asha S</td><td>AIML</td><td>SmartAI</td><td>7.5 LPA</td></tr>
+              <tr><td>Sandeep R</td><td>ECE</td><td>TCS</td><td>4.2 LPA</td></tr>
+              <tr><td>Meena R</td><td>CSE</td><td>Dell</td><td>6.8 LPA</td></tr>
+            </table>
+        </div>
+        `;
     }
 
-    else {
-      DATA.admin.allRecords.forEach(r=>{
-        area.innerHTML += `<div class="record-card">
-          <strong>${r.name}</strong>
-          <p>${r.dept} → ${r.company} (${r.pkg} LPA)</p>
-        </div>`;
-      });
-    }
-
-  }
-
-  /* REPORTS */
-  if (page === "reports") {
-    area.innerHTML += `
-      <div class="job-card">
-        <h3>Reports</h3>
-        ${DATA[role].reports}
-      </div>`;
-  }
 }
 
 
-/* RESTORE LOGIN SESSION */
-document.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("role")) {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("topbar").style.display = "flex";
-    document.getElementById("sidebar").style.display = "block";
-    document.getElementById("main").style.display = "block";
-    showPage("dashboard");
-  }
+/* ------------------- LOGIN SYSTEM ------------------- */
+function login(){
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const role = document.getElementById("role").value;
+
+    if(!name || !email) return;
+
+    localStorage.setItem("name",name);
+    localStorage.setItem("email",email);
+    localStorage.setItem("role",role);
+
+    document.getElementById("login").style.display="none";
+    document.getElementById("topbar").style.display="flex";
+    document.getElementById("sidebar").style.display="block";
+    document.getElementById("main-content").style.display="block";
+
+    showPage("dashboard", document.querySelector(".sidebar a"));
+}
+
+function showLogin(){
+    localStorage.clear();
+    document.getElementById("login").style.display="flex";
+    document.getElementById("topbar").style.display="none";
+    document.getElementById("sidebar").style.display="none";
+    document.getElementById("main-content").style.display="none";
+}
+
+function validateEmail(){
+    const email = document.getElementById("email").value;
+    const pattern = /^[\w\.]+@[\w]+\.[a-z]{2,3}$/;
+    const msg = document.getElementById("emailError");
+    const btn = document.getElementById("loginBtn");
+
+    if(pattern.test(email)){
+        msg.textContent = "";
+        btn.disabled = false;
+    } else {
+        msg.textContent = "Enter valid email";
+        btn.disabled = true;
+    }
+}
+
+/* Restore if logged in */
+document.addEventListener("DOMContentLoaded",()=>{
+    if(localStorage.getItem("name")){
+        document.getElementById("login").style.display="none";
+        document.getElementById("topbar").style.display="flex";
+        document.getElementById("sidebar").style.display="block";
+        document.getElementById("main-content").style.display="block";
+        showPage("dashboard", document.querySelector(".sidebar a"));
+    }
 });
+
 </script>
 
 </body>
