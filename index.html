@@ -1,503 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>UniPlace - All Features</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniPlace</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <!-- Material Dashboard Professional Theme -->
   <style>
     :root {
-      --primary: #0b6ef6;
-      --accent: #ff6b6b;
-      --bg: #f3f6fb;
-      --card: #ffffff;
-      --sidebar: #0f1724;
-      --sidebar-hover: #203054;
+      --primary: #007bff;
+      --secondary: #6c757d;
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --sidebar-bg: #1e272e;
+      --sidebar-hover: #3c40c6;
     }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family:"Poppins",sans-serif; background:var(--bg); color:#233; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; padding:12px 18px; background:var(--primary); color:#fff; box-shadow:0 3px 8px rgba(0,0,0,0.12); }
-    .brand { font-weight:600; }
-    #logoutBtn { background:var(--accent); color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; }
-    /* layout */
-    .sidebar { position:fixed; left:0; top:0; width:220px; height:100vh; background:var(--sidebar); padding-top:22px; display:none; }
-    .sidebar ul { list-style:none; padding:0; margin:0; }
-    .sidebar a { display:block; color:#fff; padding:12px 18px; text-decoration:none; border-left:4px solid transparent; transition:all .18s; }
-    .sidebar a:hover, .sidebar a.active { background:var(--sidebar-hover); border-left:4px solid var(--primary); }
-    .content { margin-left:260px; padding:22px; display:none; min-height:100vh; }
-    /* login */
-    .login-wrap { display:flex; align-items:center; justify-content:center; height:100vh; }
-    .login-box { width:360px; background:#fff; padding:26px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.14); }
-    .login-box input, .login-box select { width:100%; padding:10px; margin-top:10px; border-radius:8px; border:1px solid #d6dbe8; }
-    .btn { display:inline-block; padding:10px 14px; background:var(--primary); color:#fff; border-radius:8px; border:none; cursor:pointer; }
-    .btn.secondary { background:#444; }
-    .card { background:var(--card); padding:16px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); margin-bottom:12px; }
-    /* image editor */
-    #imageCanvas { max-width:100%; border-radius:6px; background:#eee; }
-    .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
-    input[type="file"] { padding:6px 0; }
-    .jobs-grid { display:flex; gap:12px; flex-wrap:wrap; }
-    .job-card { width:320px; }
-    .profile-avatar { width:96px; height:96px; border-radius:50%; object-fit:cover; border:3px solid #fff; box-shadow:0 6px 18px rgba(0,0,0,0.12); }
-    .small { font-size:13px; color:#555; }
-    .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-    @media(max-width:900px){ .content{ margin-left:14px; } .sidebar{ display:none } }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: #2f3640;
+      transition: 0.3s ease;
+    }
+
+    /* Top Bar */
+    .topbar {
+      background: var(--primary);
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      height: 100vh;
+      background: var(--sidebar-bg);
+      padding: 25px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      transition: 0.3s;
+    }
+    .sidebar h3 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar li {
+      margin: 10px 0;
+    }
+    .sidebar a {
+      padding: 12px 20px;
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-size: 15px;
+      border-left: 4px solid transparent;
+      transition: 0.25s;
+    }
+    .sidebar a:hover, .sidebar a.active {
+      background: var(--sidebar-hover);
+      border-left: 4px solid white;
+    }
+
+    /* Page Content */
+    .content {
+      margin-left: 240px;
+      padding: 24px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Job Cards */
+    .job-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .job-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+
+    /* Login */
+    .login-container {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #dcdde1;
+    }
+
+    .login-box {
+      background: white;
+      width: 340px;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      animation: fadeIn 0.5s ease;
+    }
+
+    .login-box input, .login-box select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 15px;
+      background: var(--primary);
+      border: none;
+      padding: 10px;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    button:hover:not(:disabled) {
+      background: #0056c9;
+    }
+    button:disabled {
+      background: gray;
+      cursor: not-allowed;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    table.data-table th, table.data-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    table.data-table th {
+      background: #f7f9fb;
+    }
+
+    .report-list {
+      background: var(--card-bg);
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 180px;
+      }
+      .content {
+        margin-left: 200px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- TOP BAR -->
-  <div class="topbar" id="topbar" style="display:none;">
-    <div class="brand">UniPlace</div>
-    <div style="display:flex; gap:12px; align-items:center;">
-      <div id="userLabel" class="small"></div>
-      <button id="logoutBtn" onclick="doLogout()">Logout</button>
-    </div>
+  <div class="topbar">
+    <h2>UniPlace Dashboard</h2>
+    <button onclick="showLogin()">Logout</button>
   </div>
 
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar" style="display:none;">
-    <ul id="menuList"></ul>
+  <div class="sidebar">
+    <h3>Menu</h3>
+    <ul>
+      <li><a href="#" onclick="showPage('dashboard', this)" class="active">Dashboard</a></li>
+      <li><a href="#" onclick="showPage('jobs', this)">Jobs</a></li>
+      <li><a href="#" onclick="showPage('applications', this)">Applications</a></li>
+      <li><a href="#" onclick="showPage('reports', this)">Reports</a></li>
+    </ul>
   </div>
 
-  <!-- MAIN CONTENT -->
-  <div class="content" id="main-content" style="display:none;">
-    <!-- pages injected here -->
+  <div class="content" id="main-content">
+    <h3>Welcome to UniPlace!</h3>
+    <div class="job-card"><h4>Frontend Developer</h4><p>TechCorp - Remote</p></div>
+    <div class="job-card"><h4>Data Analyst</h4><p>DataSolve - Hyderabad</p></div>
   </div>
 
-  <!-- LOGIN PAGE -->
-  <div id="loginPage" class="login-wrap">
-    <div class="login-box card">
-      <h2 style="margin:0;color:var(--primary)">UniPlace Login</h2>
-      <p class="small" style="margin:6px 0 0 0">Sign in (local demo)</p>
-      <input id="name" placeholder="Full name" />
-      <input id="email" placeholder="Email" oninput="validateEmail()" />
-      <p id="emailError" class="small" style="color:#b00020;margin:6px 0 0 0"></p>
-      <select id="role" style="margin-top:8px;">
+  <!-- Login Screen -->
+  <div class="login-container" id="login">
+    <div class="login-box">
+      <h2>Login</h2>
+      <input type="text" id="name" placeholder="Name" />
+      <input type="email" id="email" placeholder="Email" oninput="validateEmail()" />
+      <p id="emailError" style="color:red;font-size:13px;text-align:left"></p>
+      <select id="role">
         <option value="student">Student</option>
         <option value="admin">Admin</option>
       </select>
-      <div style="display:flex; gap:8px; margin-top:12px;">
-        <button id="loginBtn" class="btn" onclick="doLogin()" disabled>Login</button>
-        <button class="btn secondary" onclick="fillDemo()">Demo</button>
-      </div>
-      <p class="small" style="margin-top:10px;color:#666">Data & session stored in browser localStorage.</p>
+      <button id="loginBtn" onclick="login()" disabled>Login</button>
     </div>
   </div>
 
+<!-- Scripts moved to bottom for proper loading -->
 <script>
-/* -------------------------
-   Storage keys & defaults
-   -------------------------*/
-const KEY_USER = 'uni_user';                // {name,email,role,avatar}
-const KEY_JOBS = 'uni_jobs';                // array of jobs
-const KEY_APPS = 'uni_applications';        // array of {jobId,email,date,status}
+  // All functions defined at the end so onclick handlers (in markup) can reference them safely.
 
-/* -------------------------
-   Utilities
-   -------------------------*/
-function $(id){ return document.getElementById(id); }
-function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
-function load(key, def=null){ const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; }
-function uid(){ return 'j'+Math.random().toString(36).slice(2,9); }
-function formatDate(d){ return new Date(d).toISOString().slice(0,10); }
-
-/* -------------------------
-   Initialize defaults if none
-   -------------------------*/
-if(!load(KEY_JOBS)) {
-  const seed = [
-    { id: uid(), title:"Frontend Developer", company:"TechCorp", location:"Remote", posted: "2025-11-10", desc:"Build UI", slots:3 },
-    { id: uid(), title:"Data Analyst", company:"DataSolve", location:"Hyderabad", posted: "2025-11-08", desc:"Analyze data", slots:2 }
-  ];
-  save(KEY_JOBS, seed);
-}
-
-/* -------------------------
-   Auth & UI control
-   -------------------------*/
-function validateEmail(){
-  const email = $('email').value.trim();
-  const err = $('emailError'); const btn = $('loginBtn');
-  const ok = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
-  err.textContent = ok ? '' : 'Enter a valid email';
-  btn.disabled = !ok || !$('name').value.trim();
-}
-$('name')?.addEventListener?.('input', validateEmail);
-
-function fillDemo(){ $('name').value = 'Student User'; $('email').value='student@example.com'; $('role').value='student'; validateEmail(); }
-function doLogin(){
-  const name = $('name').value.trim(), email = $('email').value.trim(), role = $('role').value;
-  if(!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ alert('Provide valid name & email'); return; }
-  const user = { name, email, role, avatar: load(KEY_USER)?.avatar || '' };
-  save(KEY_USER, user);
-  showAppForUser();
-}
-
-function doLogout(){
-  localStorage.removeItem(KEY_USER);
-  // hide app, show login
-  $('loginPage').style.display='flex';
-  $('topbar').style.display='none';
-  $('sidebar').style.display='none';
-  $('main-content').style.display='none';
-}
-
-/* -------------------------
-   Menu rendering by role
-   -------------------------*/
-function renderMenu(){
-  const user = load(KEY_USER);
-  const menu = $('menuList'); menu.innerHTML='';
-  if(!user) return;
-  const role = user.role;
-  const items = (role==='admin') ? [
-    ['dashboard','Dashboard'],['jobs','Jobs'],['applications','Applications'],
-    ['imageEditor','Image Editor'],['addJob','Add Job'],['profile','Profile']
-  ] : [
-    ['dashboard','Dashboard'],['jobs','Jobs'],['applications','Applications'],
-    ['imageEditor','Image Editor'],['profile','Profile']
-  ];
-  items.forEach(([id,label], idx)=>{
-    const li = document.createElement('li');
-    li.innerHTML = `<a href="#" data-id="${id}" onclick="navTo('${id}', this)">${label}</a>`;
-    menu.appendChild(li);
-  });
-}
-
-/* -------------------------
-   Navigation & pages
-   -------------------------*/
-function navTo(page, el){
-  document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
-  if(el) el.classList.add('active');
-  renderPage(page);
-}
-
-function showAppForUser(){
-  const user = load(KEY_USER);
-  if(!user) return;
-  $('loginPage').style.display='none';
-  $('topbar').style.display='flex';
-  $('sidebar').style.display='block';
-  $('main-content').style.display='block';
-  $('userLabel').textContent = `${user.name} (${user.role})`;
-  renderMenu();
-  renderPage('dashboard');
-}
-
-/* -------------------------
-   Page: Dashboard
-   -------------------------*/
-function renderPage(page){
-  const main = $('main-content');
-  if(page==='dashboard'){
-    main.innerHTML = `<h2>Welcome to UniPlace</h2>
-      <div class="card">
-        <p class="small">Quick Actions</p>
-        <div style="display:flex;gap:8px;"><button class="btn" onclick="renderPage('jobs')">Browse Jobs</button><button class="btn" onclick="renderPage('imageEditor')">Open Image Editor</button></div>
-      </div>`;
-    return;
+  function setActiveLink(el) {
+    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+    if (el) el.classList.add('active');
   }
 
-  if(page==='jobs'){ renderJobs(); return; }
-  if(page==='applications'){ renderApplications(); return; }
-  if(page==='imageEditor'){ renderImageEditor(); return; }
-  if(page==='addJob'){ renderAddJob(); return; }
-  if(page==='profile'){ renderProfile(); return; }
-  main.innerHTML = `<h3>Page: ${page}</h3>`;
-}
+  function showPage(page, el) {
+    // Ensure 'el' can be optional when called programmatically
+    setActiveLink(el);
 
-/* -------------------------
-   Jobs: list & apply (student)
-   -------------------------*/
-function renderJobs(){
-  const jobs = load(KEY_JOBS, []);
-  const user = load(KEY_USER);
-  const apps = load(KEY_APPS, []);
-  const main = $('main-content'); main.innerHTML = `<h2>Jobs</h2>`;
-  const grid = document.createElement('div'); grid.className='jobs-grid';
-  jobs.forEach(job=>{
-    const applied = apps.some(a=>a.jobId===job.id && a.email===user.email);
-    const card = document.createElement('div'); card.className='card job-card';
-    card.innerHTML = `<h3>${job.title}</h3><p class="small">${job.company} • ${job.location}</p><p>${job.desc || ''}</p>
-      <div style="display:flex;gap:8px;margin-top:8px;">
-        <button class="btn" ${applied?'disabled':''} onclick="applyJob('${job.id}')">${applied?'Applied':'Apply'}</button>
-        <button class="btn secondary" onclick="viewJob('${job.id}')">View</button>
-      </div>`;
-    grid.appendChild(card);
-  });
-  $('main-content').appendChild(grid);
-}
+    const main = document.getElementById("main-content");
+    // Clear and set heading
+    main.innerHTML = <h3>${page.charAt(0).toUpperCase() + page.slice(1)}</h3>;
 
-function applyJob(jobId){
-  const user = load(KEY_USER);
-  if(!user){ alert('Login first'); return; }
-  const apps = load(KEY_APPS, []);
-  if(apps.some(a=>a.jobId===jobId && a.email===user.email)){ alert('Already applied'); return; }
-  apps.push({ jobId, email:user.email, date:formatDate(Date.now()), status:'Pending' });
-  save(KEY_APPS, apps);
-  alert('Application submitted!');
-  renderJobs();
-}
-
-function viewJob(jobId){
-  const jobs = load(KEY_JOBS, []);
-  const job = jobs.find(j=>j.id===jobId);
-  if(!job) return;
-  alert(`${job.title}\nCompany: ${job.company}\nLocation: ${job.location}\nPosted: ${job.posted}\n\n${job.desc||''}`);
-}
-
-/* -------------------------
-   Applications page
-   -------------------------*/
-function renderApplications(){
-  const user = load(KEY_USER);
-  const apps = load(KEY_APPS, []);
-  const jobs = load(KEY_JOBS, []);
-  const main = $('main-content'); main.innerHTML = `<h2>Applications</h2>`;
-  const my = apps.filter(a=> a.email===user.email || user.role==='admin');
-  if(!my.length) { main.innerHTML += `<div class="card">No applications found.</div>`; return; }
-  const tbl = document.createElement('table'); tbl.style.width='100%';
-  tbl.innerHTML = `<thead><tr><th>Job</th><th>Applicant</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>`;
-  const tbody = document.createElement('tbody');
-  my.forEach(a=>{
-    const job = jobs.find(j=>j.id===a.jobId) || {title:'(deleted)'};
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${job.title}</td><td>${a.email}</td><td>${a.date}</td><td>${a.status}</td>
-      <td>${user.role==='admin'? `<button class="btn" onclick="changeAppStatus('${a.jobId}','${a.email}','Accepted')">Accept</button>
-      <button class="btn secondary" onclick="changeAppStatus('${a.jobId}','${a.email}','Rejected')">Reject</button>` : '-'}</td>`;
-    tbody.appendChild(tr);
-  });
-  tbl.appendChild(tbody);
-  main.appendChild(tbl);
-}
-
-function changeAppStatus(jobId, email, status){
-  const apps = load(KEY_APPS, []);
-  const target = apps.find(a=>a.jobId===jobId && a.email===email);
-  if(!target) return;
-  target.status = status;
-  save(KEY_APPS, apps);
-  renderApplications();
-}
-
-/* -------------------------
-   Admin: Add Job
-   -------------------------*/
-function renderAddJob(){
-  const main = $('main-content');
-  main.innerHTML = `<h2>Add Job</h2>
-    <div class="card">
-      <input id="j_title" placeholder="Job title" />
-      <input id="j_company" placeholder="Company" />
-      <input id="j_location" placeholder="Location" />
-      <textarea id="j_desc" placeholder="Description" style="width:100%;height:80px;margin-top:8px;"></textarea>
-      <div style="display:flex;gap:8px;margin-top:8px;">
-        <button class="btn" onclick="addJob()">Add Job</button>
-        <button class="btn secondary" onclick="renderPage('jobs')">Back to Jobs</button>
-      </div>
-    </div>`;
-}
-
-function addJob(){
-  const title = $('j_title').value.trim(), company = $('j_company').value.trim();
-  if(!title || !company) { alert('Provide title & company'); return; }
-  const jobs = load(KEY_JOBS, []);
-  const newJob = { id: uid(), title, company, location:$('j_location').value.trim(), posted: formatDate(Date.now()), desc:$('j_desc').value.trim(), slots:1 };
-  jobs.unshift(newJob);
-  save(KEY_JOBS, jobs);
-  alert('Job added!');
-  renderPage('jobs');
-}
-
-/* -------------------------
-   Profile: avatar upload & save
-   -------------------------*/
-function renderProfile(){
-  const user = load(KEY_USER);
-  const main = $('main-content');
-  main.innerHTML = `<h2>Profile</h2>
-    <div class="card row">
-      <div style="min-width:120px">
-        <img id="avatarPreview" class="profile-avatar" src="${user?.avatar||'https://via.placeholder.com/96'}" alt="avatar">
-        <input type="file" id="avatarInput" accept="image/*" style="margin-top:8px;" onchange="uploadAvatar(event)">
-      </div>
-      <div style="flex:1">
-        <input id="profileName" value="${user?.name||''}" placeholder="Name" />
-        <input id="profileEmail" value="${user?.email||''}" placeholder="Email" />
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <button class="btn" onclick="saveProfile()">Save</button>
-          <button class="btn secondary" onclick="renderPage('dashboard')">Cancel</button>
+    if (page === "dashboard") {
+      main.innerHTML += `
+        <div class='job-card'><h4>Welcome Back!</h4><p>Here's your quick overview.</p></div>
+        <div class='report-list'>
+          <strong>Quick Stats</strong>
+          <ul>
+            <li>Total Jobs: 128</li>
+            <li>Applications: 24</li>
+            <li>Shortlisted: 8</li>
+          </ul>
+        </div>`;
+    } else if (page === "jobs") {
+      main.innerHTML += `
+        <div style='display:flex;gap:12px;flex-wrap:wrap;'>
+          <div class='job-card' style='width:320px;'><h4>Software Engineer</h4><p>Company: CodeWave</p><p>Location: Bengaluru</p></div>
+          <div class='job-card' style='width:320px;'><h4>AI Intern</h4><p>Company: SmartAI</p><p>Location: Hyderabad</p></div>
+          <div class='job-card' style='width:320px;'><h4>UX Designer</h4><p>Company: CreativeLabs</p><p>Location: Remote</p></div>
+        </div>`;
+    } else if (page === "applications") {
+      main.innerHTML += `
+        <div class='job-card'><h4>My Applications</h4><p>Status Tracking</p></div>
+        <table class='data-table'>
+          <thead><tr><th>Job</th><th>Company</th><th>Applied On</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Frontend Developer</td><td>TechCorp</td><td>2025-11-10</td><td style='color:green'>Shortlisted</td></tr>
+            <tr><td>Data Analyst</td><td>DataSolve</td><td>2025-11-08</td><td style='color:orange'>Pending</td></tr>
+            <tr><td>AI Intern</td><td>SmartAI</td><td>2025-10-22</td><td style='color:red'>Rejected</td></tr>
+          </tbody>
+        </table>`;
+    } else if (page === "reports") {
+      main.innerHTML += `
+        <div class='job-card'><h4>Placement Reports</h4><p>Overall analytics & stats</p></div>
+        <div class='report-list'>
+          <strong>Placement Summary</strong>
+          <ul>
+            <li>Placement Rate: 92%</li>
+            <li>Top Departments: CSE, AIML</li>
+            <li>Avg Package: ₹6.2 LPA</li>
+          </ul>
         </div>
-      </div>
-    </div>`;
-}
 
-function uploadAvatar(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev){
-    const dataUrl = ev.target.result;
-    $('avatarPreview').src = dataUrl;
-    // save to user on Save action
-    const u = load(KEY_USER) || {};
-    u.avatar = dataUrl;
-    save(KEY_USER,u);
-    $('userLabel').textContent = `${u.name || ''} (${u.role || ''})`;
-  };
-  reader.readAsDataURL(file);
-}
-
-function saveProfile(){
-  const user = load(KEY_USER) || {};
-  user.name = $('profileName').value.trim();
-  user.email = $('profileEmail').value.trim();
-  save(KEY_USER, user);
-  alert('Profile saved');
-  $('userLabel').textContent = `${user.name} (${user.role})`;
-}
-
-/* -------------------------
-   Image Editor
-   -------------------------*/
-let canvas, ctx, imageObj;
-function renderImageEditor(){
-  const main = $('main-content');
-  main.innerHTML = `<h2>Image Editor</h2>
-    <div class="card">
-      <input type="file" id="imgInput" accept="image/*"><br>
-      <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
-        <button class="btn" onclick="rotateCanvas(90)">Rotate →</button>
-        <button class="btn" onclick="rotateCanvas(-90)">Rotate ←</button>
-        <button class="btn" onclick="flipCanvas()">Flip</button>
-        <button class="btn" onclick="resetCanvas()">Reset</button>
-        <button class="btn" onclick="downloadCanvas()">Download</button>
-      </div>
-      <div style="margin-top:12px;">
-        <label class="small">Grayscale <input type="checkbox" id="grayscale" onchange="applyFilters()"></label>
-        <label class="small" style="margin-left:12px">Brightness <input id="bright" type="range" min="50" max="150" value="100" onchange="applyFilters()"></label>
-      </div>
-      <div style="margin-top:12px;">
-        <canvas id="imageCanvas"></canvas>
-      </div>
-    </div>`;
-  $('imgInput').addEventListener('change', loadImageFromFile);
-  canvas = $('imageCanvas'); ctx = canvas.getContext('2d');
-  imageObj = null;
-}
-
-function loadImageFromFile(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const img = new Image();
-  img.onload = function(){
-    imageObj = img;
-    canvas.width = img.width; canvas.height = img.height;
-    ctx.drawImage(img,0,0);
-    // reset filters controls
-    $('grayscale').checked = false; $('bright').value = 100;
-  };
-  img.src = URL.createObjectURL(file);
-}
-
-function resetCanvas(){
-  if(!imageObj) return;
-  canvas.width = imageObj.width; canvas.height = imageObj.height;
-  ctx.setTransform(1,0,0,1,0,0);
-  ctx.filter = 'none';
-  ctx.drawImage(imageObj,0,0);
-  $('grayscale').checked = false; $('bright').value = 100;
-}
-
-function rotateCanvas(angleDeg){
-  if(!imageObj){ alert('Upload an image first'); return; }
-  // draw current canvas into temp, rotate, put back
-  const temp = document.createElement('canvas'); const tctx = temp.getContext('2d');
-  temp.width = canvas.width; temp.height = canvas.height;
-  tctx.drawImage(canvas,0,0);
-  const rad = angleDeg * Math.PI/180;
-  // new dims
-  const newW = Math.abs(Math.round(canvas.width * Math.cos(rad))) + Math.abs(Math.round(canvas.height * Math.sin(rad)));
-  const newH = Math.abs(Math.round(canvas.height * Math.cos(rad))) + Math.abs(Math.round(canvas.width * Math.sin(rad)));
-  canvas.width = newW; canvas.height = newH;
-  ctx.setTransform(1,0,0,1,0,0);
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  // translate to center & rotate
-  ctx.translate(canvas.width/2, canvas.height/2);
-  ctx.rotate(rad);
-  ctx.drawImage(temp, -temp.width/2, -temp.height/2);
-  // reset transform and apply filters if set
-  ctx.setTransform(1,0,0,1,0,0);
-  applyFilters();
-}
-
-function flipCanvas(){
-  if(!imageObj || !canvas) { alert('Upload first'); return; }
-  const temp = document.createElement('canvas'); const tctx = temp.getContext('2d');
-  temp.width = canvas.width; temp.height = canvas.height;
-  tctx.drawImage(canvas,0,0);
-  ctx.setTransform(-1,0,0,1,canvas.width,0); // horizontal flip
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.drawImage(temp,0,0);
-  ctx.setTransform(1,0,0,1,0,0);
-  applyFilters();
-}
-
-function applyFilters(){
-  if(!canvas) return;
-  // read pixels and apply grayscale & brightness
-  const g = $('grayscale').checked;
-  const bright = parseInt($('bright').value,10)/100;
-  // Use an offscreen temp to avoid browser taint issues with cross-origin images
-  const temp = document.createElement('canvas'); temp.width = canvas.width; temp.height = canvas.height;
-  const tctx = temp.getContext('2d');
-  tctx.drawImage(canvas,0,0);
-  let imgd = tctx.getImageData(0,0,temp.width,temp.height);
-  const data = imgd.data;
-  for(let i=0;i<data.length;i+=4){
-    let r=data[i], g_=data[i+1], b=data[i+2];
-    if(g) {
-      // grayscale lum
-      const lum = 0.2126*r + 0.7152*g_ + 0.0722*b;
-      r=g_=b=lum;
+        <div style='margin-top:12px;' class='report-list'>
+          <strong>Records</strong>
+          <table class='data-table'>
+            <thead><tr><th>Student</th><th>Dept</th><th>Placed Company</th><th>Package (LPA)</th></tr></thead>
+            <tbody>
+              <tr><td>Rahul K</td><td>CSE</td><td>CodeWave</td><td>8.0</td></tr>
+              <tr><td>Asha S</td><td>AIML</td><td>SmartAI</td><td>7.2</td></tr>
+              <tr><td>Priya M</td><td>CSE</td><td>DataSolve</td><td>5.5</td></tr>
+            </tbody>
+          </table>
+        </div>`;
+    } else {
+      main.innerHTML += <p>Page not found.</p>;
     }
-    r = Math.min(255, r * bright);
-    g_ = Math.min(255, g_ * bright);
-    b = Math.min(255, b * bright);
-    data[i]=r; data[i+1]=g_; data[i+2]=b;
   }
-  tctx.putImageData(imgd,0,0);
-  // draw back to visible canvas
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.drawImage(temp,0,0);
-}
 
-function downloadCanvas(){
-  if(!canvas) { alert('No image'); return; }
-  const link = document.createElement('a');
-  link.href = canvas.toDataURL('image/png');
-  link.download = 'edited-image.png';
-  link.click();
-}
-
-/* -------------------------
-   App bootstrap: check session
-   -------------------------*/
-document.addEventListener('DOMContentLoaded', ()=>{
-  const user = load(KEY_USER);
-  if(user){ showAppForUser(); } else {
-    $('loginPage').style.display='flex';
-  }
-  // attach global event: if sidebar clicked link, manage active
-  document.addEventListener('click', (ev)=>{
-    if(ev.target.matches('.sidebar a')) {
-      document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
-      ev.target.classList.add('active');
+  function login() {
+    // Basic UI-only login simulation
+    const name = document.getElementById('name').value.trim();
+    const role = document.getElementById('role').value;
+    if (!name) {
+      alert('Please enter your name');
+      return;
     }
+    document.getElementById('login').style.display = 'none';
+    document.querySelector('.topbar').style.display = 'flex';
+    document.querySelector('.sidebar').style.display = 'flex';
+    document.querySelector('.content').style.display = 'block';
+
+    // personalise welcome
+    const main = document.getElementById('main-content');
+    main.innerHTML = <h3>Welcome, ${name} (${role})</h3>;
+    // show dashboard after login
+    showPage('dashboard', document.querySelector('.sidebar a'));
+  }
+
+  function showLogin() {
+    document.getElementById('login').style.display = 'flex';
+    document.querySelector('.topbar').style.display = 'none';
+    document.querySelector('.sidebar').style.display = 'none';
+    document.querySelector('.content').style.display = 'none';
+  }
+
+  function validateEmail() {
+    const email = document.getElementById("email").value;
+    const error = document.getElementById("emailError");
+    const loginBtn = document.getElementById("loginBtn");
+
+    const pattern = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+    if (!pattern.test(email)) {
+      error.textContent = "Enter a valid email";
+      loginBtn.disabled = true;
+    } else {
+      error.textContent = "";
+      loginBtn.disabled = false;
+    }
+  }
+
+  // -- Simple test helpers (run in console) --
+  // testNavigation() will simulate clicks on all sidebar items and log current heading.
+  function testNavigation() {
+    const links = Array.from(document.querySelectorAll('.sidebar a'));
+    links.forEach((a, idx) => {
+      setTimeout(() => {
+        a.click();
+        console.log('Clicked', a.textContent.trim(), 'Heading:', document.querySelector('#main-content h3').textContent);
+      }, idx * 150);
+    });
+  }
+
+  // Initialize: show login on start
+  document.addEventListener('DOMContentLoaded', () => {
+    showLogin();
   });
-});
 </script>
+
 </body>
 </html>
